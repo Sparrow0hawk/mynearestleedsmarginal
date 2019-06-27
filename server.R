@@ -9,7 +9,6 @@ library(leaflet)
 library(googleway)
 library(sp)
 # not needed loading data
-#library(geojsonio)
 library(dplyr)
 library(rgeos)
 

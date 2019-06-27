@@ -5,14 +5,33 @@
 
 require(leaflet)
 
-# for development
-setwd("/Users/alexcoleman/OneDrive - University of Leeds/Code/R scripts/Nearest Marginal Leeds 2018 app/2019 update/mynearestleedsmarginal_2019_build_4/")
+card_meta <- list(
+  t_ilte = 'mynearestleedsmarginal.com',
+  u_rl = 'https://www.mynearestleedsmarginal.com/',
+  img = 'https://mynearestleedsmarginal.com/shiny/src/mynearestleedsmarg.png',
+  descrip_tion = 'Find your nearest marginal council seat and help campaign!'
+)
 
 # anything going into fluidPage goes into app
 ui <- fluidPage(
-  tags$head(includeScript("./gtag1.js"),
-            # include style tag
-            tags$style(HTML('.Linkbutton {
+  tags$head(
+    includeScript("./gtag1.js"),
+    # section for twitter card
+    tags$meta(name = 'twitter:card', content = 'summary'),
+    tags$meta(name = 'twitter:title', content = card_meta$t_ilte),
+    tags$meta(name = 'twitter:url', content = card_meta$u_rl),
+    tags$meta(name = 'twitter:image', content = card_meta$img),
+    tags$meta(name = 'twitter:description', content = card_meta$descrip_tion),
+    
+    # section for FB opengraph
+    tags$meta(property = 'og:title', content = card_meta$t_ilte),
+    tags$meta(property = 'og:type', content = 'website'),
+    tags$meta(property = 'og:image', content = card_meta$img),
+    tags$meta(property = 'og:url', content = card_meta$u_rl),
+    tags$meta(property = 'og:description', content = card_meta$descrip_tion),
+    
+    # include style tag
+    tags$style(HTML('.Linkbutton {
                        display: block;
                       width: 250px;
                        background: rgb(230, 0, 71);
