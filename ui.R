@@ -1,21 +1,18 @@
-# 2019 build ver3
-# 25/01/2019
-# includes google analytics script
-# UI
+# UI file for mynearestleedsmarginal.com
 
 require(leaflet)
 
 card_meta <- list(
   t_ilte = 'mynearestleedsmarginal.com',
   u_rl = 'https://www.mynearestleedsmarginal.com/',
-  img = 'https://mynearestleedsmarginal.com/shiny/src/mynearestleedsmarg.png',
+  img = 'https://mynearestleedsmarginal.com/shiny/src/img/mynearestleedsmarg.png',
   descrip_tion = 'Find your nearest marginal council seat and help campaign!'
 )
 
 # anything going into fluidPage goes into app
 ui <- fluidPage(
   tags$head(
-    includeScript("./gtag1.js"),
+    includeScript("./src/js/gtag1.js"),
     # section for twitter card
     tags$meta(name = 'twitter:card', content = 'summary'),
     tags$meta(name = 'twitter:title', content = card_meta$t_ilte),
@@ -33,25 +30,25 @@ ui <- fluidPage(
     # include style tag
     tags$style(HTML('.Linkbutton {
                        display: block;
-                      width: 250px;
+                       width: 250px;
                        background: rgb(230, 0, 71);
                        padding: 5px;
                        text-align: center;
                        color: white;
-                        margin: auto;
-            }
-                            .Linkbutton2 {
-                            display: inline-block;
-                            width: 200px;
-                            background: rgb(230, 0, 71);
-                            padding: 2px;
-                            text-align: center;
-                            color: white;
-                            }'
+                       margin: auto;
+                       }
+                      .Linkbutton2 {
+                        display: inline-block;
+                        width: 200px;
+                        background: rgb(230, 0, 71);
+                        padding: 2px;
+                        text-align: center;
+                        color: white;
+                       }'
             ))
             ),
   
-  includeCSS("./mark6.1.css"),
+  includeCSS("./src/css/mark6.1.css"),
   
   # UI title panel
   titlePanel("My Nearest Leeds 2019 Marginal"),
@@ -89,7 +86,7 @@ ui <- fluidPage(
       
     ),
     mainPanel(
-      #tags$body(includeScript("./bookmark1.js")),
+      #tags$body(includeScript(".src/js/bookmark1.js")),
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
