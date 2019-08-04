@@ -1,8 +1,4 @@
-# 2019 build ver4
-# server
-# now includes find my ward button and find my marginal
-# now returns email addresses for those provided
-# uses .csv key seats list
+# server.R for mynearestleedsmarginal.com
 
 library(shiny)
 library(leaflet)
