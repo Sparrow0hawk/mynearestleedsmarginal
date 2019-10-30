@@ -19,3 +19,15 @@ get_geojson <- function() {
   
   return(sco_wpc)
 }
+
+get_targeting <- function() {
+  # test loading the targeting spreadsheet
+  
+  data_path <- here("tests","testdata","test_target.csv")
+  
+  target_frame <- data.frame(read.csv(data_path))
+  
+  return(target_frame)
+}
+
+

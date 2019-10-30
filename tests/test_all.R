@@ -11,3 +11,10 @@ test_that('test get_geojson', {
   expect_equal(as.character(sco_wpc$PCON13NM[1]), 'Aberdeen North')
 })
 
+test_that('test get_target', {
+  
+  target_data <- get_targeting()
+  
+  expect_equal(as.character(target_data$Constituency[1]), 'Glasgow South West')
+})
+
