@@ -1,5 +1,8 @@
 # server.R for mynearestleedsmarginal.com
 
+# TODO: add scotland constituency geojson
+# https://raw.githubusercontent.com/martinjc/UK-GeoJSON/master/json/electoral/sco/wpc.json
+
 library(shiny)
 library(leaflet)
 library(googleway)
