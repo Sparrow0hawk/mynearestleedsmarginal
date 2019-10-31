@@ -90,15 +90,15 @@ server <- function(input, output, session) {
         addPolygons(data = target_geo,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(arranged.dist_frame$Party), 
+                    fillColor = ~pal(targeting_data$Party), 
                     fillOpacity=0.7,
                     weight = 2,
                     popup = sprintf(
                       "<strong>%s</strong><br/>%s majority<br/>%s <br/> <a href=%s>Click for link to events</a>",
-                      arranged.dist_frame$CONSTITUENCY, 
-                      as.character(arranged.dist_frame$MAJORITY), 
-                      arranged.dist_frame$Party,
-                      as.character(arranged.dist_frame$Link.to.doc)
+                      targeting_data$CONSTITUENCY, 
+                      as.character(targeting_data$MAJORITY), 
+                      targeting_data$Party,
+                      as.character(targeting_data$Link.to.doc)
                     ) %>% lapply(htmltools::HTML)
                     ) %>%
         addMarkers(data = points()$results$geometry$location)
