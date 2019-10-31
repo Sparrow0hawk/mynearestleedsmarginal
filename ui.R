@@ -1,12 +1,12 @@
-# UI file for mynearestleedsmarginal.com
+# UI file for mynearestleedsmarginal.com/studentmarginals2019
 
 require(leaflet)
 
 card_meta <- list(
-  t_ilte = 'mynearestleedsmarginal.com',
+  t_ilte = 'mynearestleedsmarginal.com/studentmarginals2019',
   u_rl = 'https://www.mynearestleedsmarginal.com/',
   img = 'https://mynearestleedsmarginal.com/shiny/src/img/mynearestleedsmarg.png',
-  descrip_tion = 'Find your nearest marginal council seat and help campaign!'
+  descrip_tion = 'Find your nearest marginal Scottish constituency and help campaign!'
 )
 
 # anything going into fluidPage goes into app
@@ -51,16 +51,16 @@ ui <- fluidPage(
   includeCSS("./src/css/mark6.1.css"),
   
   # UI title panel
-  titlePanel("My Nearest Leeds 2019 Marginal"),
+  titlePanel("Find my nearest Scottish Marginal 2019"),
   # creates a side bar for postcode, button and slider
   sidebarLayout(
 
     sidebarPanel(
       
-      tags$p("Welcome to my nearest marginal ward for Leeds 2019 council elections!"),
-      tags$p("We need your help to keep Leeds a Labour Council this year."),
+      tags$p("Welcome to find my nearest Scottish Marginal 2019!"),
+      tags$p("You can use this tool to find your nearest Scottish marginal and help turnout Scotland red for Christmas!"),
       tags$p("Enter your postcode below and press search to
-            find your nearest marginal."),
+            find your nearest marginal and links to event pages."),
       tags$p(" "),
       
       # text input for postcode
@@ -69,30 +69,23 @@ ui <- fluidPage(
       # button to control map generation
       actionButton("go","Search"),
       
-      # add a button to refresh map
-      actionButton('refresher_map','Refresh'),
-      
-      # add a button for finding home ward
-      actionButton('my_ward','My Ward'),
-      
       tags$br(),
       tags$br(),
       
-      tags$strong("Don't forget polling day is Thursday 2nd May!")
+      tags$strong("Don't forget polling day is Thursday 12th December!")
       ,tags$p(" ")
-      ,tags$p('#keepLeedsLabour', class = 'Linkbutton2')
+      ,tags$p('#turnScotlandRed', class = 'Linkbutton2')
       ,tags$p(' ')
       
       
     ),
     mainPanel(
-      #tags$body(includeScript(".src/js/bookmark1.js")),
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
                
       ),
-                  #textOutput("value2")),
+      
       tags$br(),
       leafletOutput("mymap"),
       tags$style('#help1{font-size: 10px;
@@ -100,8 +93,8 @@ ui <- fluidPage(
                         font-family: open sans;
                         }'),
       tags$p(' ')
-      ,tags$p(align = 'center',tags$a(class = 'Linkbutton2', href='https://www.gov.uk/register-to-vote', 'Register to vote'),'   ',tags$a(class = 'Linkbutton2', href='https://www.leeds.gov.uk/docs/Application%20to%20Vote%20by%20Post.pdf', 'Get a postal vote'))
-      ,tags$br(),
+      ,tags$p(align = 'center',tags$a(class = 'Linkbutton2', href='https://www.gov.uk/register-to-vote', 'Register to vote')),
+      tags$br(),
       tags$p(id = "help1", "Made by Alex Coleman ~ Found an error?",tags$a(id = "help1",href="mailto:alexcoleman@hunsletandriversidelabour.org.uk", "Email Me.")),
       tags$p(id = "help1", "If the page becomes unresponsive try refreshing your browser."),
       tags$p(id = "help1", "This page was made using Shiny.")
