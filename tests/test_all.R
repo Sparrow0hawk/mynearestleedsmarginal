@@ -32,3 +32,19 @@ test_that('test get_myGeo', {
   
   expect_equal(test_geo$results$geometry$location$lng, -0.124663, tolerance = .0001)
 })
+
+test_that('test determine_dist', {
+  
+  load(here('tests','testdata','testdist.Rdata'))
+  
+  test_frame <- read.csv(here("tests","testdata","test_target.csv"))
+  
+  dist_frame <- determine_dist(points_lst = test_addr,
+                 wpc_geo = test_polygon,
+                 target_data = test_frame)
+  
+  expect_equal(colnames(dist_frame), c('Constituency','MAJORITY','Link.to.doc',
+                                       'Target.Hold','Labour.club','Distance from points'))
+})
+
+
