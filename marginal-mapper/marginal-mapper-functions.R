@@ -38,8 +38,8 @@ get_myGeo <- function(postcode, geokey) {
 
 determine_dist <- function(points_lst, wpc_geo, target_data) {
   
-  points_a <- cbind(lon = points_lst$results$geometry$location$lng, 
-                    lat = points_lst$results$geometry$location$lat)
+  points_a <- cbind(lon = points_lst()$results$geometry$location$lng, 
+                    lat = points_lst()$results$geometry$location$lat)
   
   points_sp <- SpatialPoints(points_a)
   
@@ -59,21 +59,15 @@ determine_dist <- function(points_lst, wpc_geo, target_data) {
   return(combined_dist_data)
 }
 
-base_map <- function(data, dataframe, labels, category_field) {
-  
-  # specify colours
-  polpartycol <- c('red','yellow')
-  
-  pal <- colorFactor(palette = polpartycol,
-                     levels(dataframe[,category_field]))
+base_map <- function(data, dataframe, labels, category_field, col_pal) {
   
   map <- leaflet() %>%
       addTiles() %>%
       addPolygons(data = data,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = pal(dataframe[,category_field]), 
-                  fillOpacity=0.3,
+                  fillColor = col_pal(dataframe[,category_field]), 
+                  fillOpacity=0.7,
                   dashArray = 5,
                   weight = 2,
                   group = "Constituency",
