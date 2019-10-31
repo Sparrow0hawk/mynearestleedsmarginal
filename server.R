@@ -11,7 +11,7 @@ library(rgeos)
 
 # loading basic environment data
 # now loads geodata
-load(here("src","data","environdata.Rdata"), envir=.GlobalEnv)
+load(here("src","data","environdata.RData"), envir=.GlobalEnv)
 
 # specify data path
 data_path <- here('src','data','target_data.csv')
