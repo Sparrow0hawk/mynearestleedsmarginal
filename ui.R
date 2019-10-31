@@ -19,14 +19,14 @@ ui <- fluidPage(
     tags$meta(name = 'twitter:url', content = card_meta$u_rl),
     tags$meta(name = 'twitter:image', content = card_meta$img),
     tags$meta(name = 'twitter:description', content = card_meta$descrip_tion),
-    
+
     # section for FB opengraph
     tags$meta(property = 'og:title', content = card_meta$t_ilte),
     tags$meta(property = 'og:type', content = 'website'),
     tags$meta(property = 'og:image', content = card_meta$img),
     tags$meta(property = 'og:url', content = card_meta$u_rl),
     tags$meta(property = 'og:description', content = card_meta$descrip_tion),
-    
+
     # include style tag
     tags$style(HTML('.Linkbutton {
                        display: block;
@@ -47,45 +47,45 @@ ui <- fluidPage(
                        }'
             ))
             ),
-  
+
   includeCSS("./src/css/mark6.1.css"),
-  
+
   # UI title panel
   titlePanel("Find my nearest Scottish Marginal 2019"),
   # creates a side bar for postcode, button and slider
   sidebarLayout(
 
     sidebarPanel(
-      
+
       tags$p("Welcome to find my nearest Scottish Marginal 2019!"),
       tags$p("You can use this tool to find your nearest Scottish marginal and help turnout Scotland red for Christmas!"),
       tags$p("Enter your postcode below and press search to
             find your nearest marginal and links to event pages."),
       tags$p(" "),
-      
+
       # text input for postcode
       textInput("postcode","Enter postcode", NULL),
-      
+
       # button to control map generation
       actionButton("go","Search"),
-      
+
       tags$br(),
       tags$br(),
-      
+
       tags$strong("Don't forget polling day is Thursday 12th December!")
       ,tags$p(" ")
       ,tags$p('#turnScotlandRed', class = 'Linkbutton2')
       ,tags$p(' ')
-      
-      
+
+
     ),
     mainPanel(
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
-               
+
       ),
-      
+
       tags$br(),
       leafletOutput("mymap"),
       tags$style('#help1{font-size: 10px;
@@ -94,15 +94,11 @@ ui <- fluidPage(
                         }'),
       tags$p(' ')
       ,tags$p(align = 'center',tags$a(class = 'Linkbutton2', href='https://www.gov.uk/register-to-vote', 'Register to vote')),
-<<<<<<< HEAD
       tags$br(),
-=======
-      ,tags$br(),
->>>>>>> 347c1fdd53ee2ff7c31f6838e0280b62c275b414
       tags$p(id = "help1", "Made by Alex Coleman ~ Found an error?",tags$a(id = "help1",href="mailto:alexcoleman@hunsletandriversidelabour.org.uk", "Email Me.")),
       tags$p(id = "help1", "If the page becomes unresponsive try refreshing your browser."),
       tags$p(id = "help1", "This page was made using Shiny.")
-      
+
     )
   )
 )
