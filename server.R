@@ -115,7 +115,14 @@ server <- function(input, output, session) {
                   font-size: 20px;
                   text-align: center;
                   '>",
-      "Your nearest marginal is ",as.character(arranged.dist_frame$Constituency[1]),'</div>'))
+      "Your nearest marginal is ",as.character(arranged.dist_frame$Constituency[1]),'</div>'),
+      "<div style='border-color: rgb(230, 0, 71);
+                  border-bottom-style: solid;
+                  border-left-style: solid;
+                  border-right-style: solid;
+                  font-size: 20px;
+                  text-align: center;
+                  '>")
       })
     })
   
