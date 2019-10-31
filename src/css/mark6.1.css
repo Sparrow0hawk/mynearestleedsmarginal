@@ -24,7 +24,6 @@
 *{ font-family: Open Sans;
 }
 
-<style>
 .mex {
   text-align: center;
   font-size: 20px;
@@ -60,4 +59,12 @@ button {font-family: Open Sans
 label {font-family: Open Sans
 }
 
-</style>
+.top-marg {
+  border-color: rgb(230, 0, 71);
+  border-top-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  font-size: 20px;
+  text-align: center;
+}
