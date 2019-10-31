@@ -11,13 +11,22 @@ library(rgeos)
 # loading basic environment data
 load(here("src","data","environdata.Rdata"), envir=.GlobalEnv)
 
+# specify data path
 data_path <- here('src','data','target_data.csv')
 
+# load targeting dataframe
 targeting_data <- get_targeting(data_path)
 
+# load geojson data for scottish wpc
 sco_wpc_geo <- get_geojson()
 
-polpartycol <- c('red','')
+# pull out required constituencies
+target_geo <- sco_wpc_geo[match(targeting_data$constit_cd, sco_wpc_geo$PCON13CD),]
+
+targeting_data <- targeting_data[match(target_geo$PCON13CD, targeting_data$constit_cd),]
+
+# specify colours
+polpartycol <- c('red','yellow')
 
 server <- function(input, output, session) {
   
@@ -25,34 +34,32 @@ server <- function(input, output, session) {
                      levels(targeting_data$Party))
   
   labels <- sprintf(
-    "<strong>%s</strong><br/>%g majority<br/>%s",
-    targeting_data$Constituency, 
-    targeting_data$MAJORITY, 
-    targeting_data$PARTY
+    "<strong>%s</strong><br/>%s majority<br/>%s",
+    targeting_data$CONSTITUENCY, 
+    as.character(targeting_data$MAJORITY), 
+    targeting_data$Party
   ) %>% lapply(htmltools::HTML)
   
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
   # key seats
   points <- eventReactive(input$go, {
-    if (input$postcode == ""){
-      a <- lst[sample(c(1,3,5))]
-    } else
-      a <- google_geocode(as.character(input$postcode), key = key1)},
+    get_myGeo(postcode = input$postcode, geokey = key1)
+  },
     ignoreNULL= TRUE)
   
   output$mymap <- renderLeaflet({
     leafletOptions(maxZoom = 10)  
     leaflet() %>%
       addTiles() %>%
-      addPolygons(data = shape_leeds,
+      addPolygons(data = target_geo,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = ~pal(incumbents_df1$Description), 
+                  fillColor = pal(targeting_data$Party), 
                   fillOpacity=0.3,
                   dashArray = 5,
                   weight = 2,
-                  group = "Wards",
+                  group = "Constituency",
                   label = labels)
   })
   

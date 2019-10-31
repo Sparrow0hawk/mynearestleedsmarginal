@@ -20,14 +20,20 @@ get_geojson <- function() {
   return(sco_wpc)
 }
 
-get_targeting <- function() {
+get_targeting <- function(data_path) {
   # test loading the targeting spreadsheet
-  
-  data_path <- here("tests","testdata","test_target.csv")
   
   target_frame <- data.frame(read.csv(data_path))
   
   return(target_frame)
 }
+
+get_myGeo <- function(postcode, geokey) {
+  
+  points_dim <- google_geocode(as.character(postcode), key = geokey)
+  
+  return(points_dim)
+}
+
 
 
