@@ -94,7 +94,11 @@ ui <- fluidPage(
                         }'),
       tags$p(' ')
       ,tags$p(align = 'center',tags$a(class = 'Linkbutton2', href='https://www.gov.uk/register-to-vote', 'Register to vote')),
+<<<<<<< HEAD
       tags$br(),
+=======
+      ,tags$br(),
+>>>>>>> 347c1fdd53ee2ff7c31f6838e0280b62c275b414
       tags$p(id = "help1", "Made by Alex Coleman ~ Found an error?",tags$a(id = "help1",href="mailto:alexcoleman@hunsletandriversidelabour.org.uk", "Email Me.")),
       tags$p(id = "help1", "If the page becomes unresponsive try refreshing your browser."),
       tags$p(id = "help1", "This page was made using Shiny.")
