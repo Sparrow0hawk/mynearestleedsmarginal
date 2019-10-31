@@ -1,7 +1,7 @@
 # gitignore for mynearestleedsmarginal2019
 .Rproj.user
 .Rhistory
-.RData
+*.RData
 .Ruserdata
 emails2019.csv
 packrat/lib*/

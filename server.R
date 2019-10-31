@@ -1,38 +1,34 @@
-# server.R for mynearestleedsmarginal.com
-
+# server.R for studentmarginals2019
+source(here('marginal-mapper','marginal-mapper-functions.R'))
 library(shiny)
 library(leaflet)
 library(googleway)
 library(sp)
-# not needed loading data
 library(dplyr)
 library(rgeos)
 
-options(shiny.sanitize.errors = FALSE)
 
-# load all preparaed data
-load("./src/data/testdata1.RData", envir=.GlobalEnv)
+# loading basic environment data
+load(here("src","data","environdata.Rdata"), envir=.GlobalEnv)
 
-# load key seats list
-keyseats <- as.character(read.csv("./src/data/keyseatlist.csv", header=FALSE)$V1)
+data_path <- here('src','data','target_data.csv')
 
-# load emails list
-emailstbl <- data.frame(read.csv("./src/data/emails2019.csv", encoding = "latin", header=FALSE))
+targeting_data <- get_targeting(data_path)
 
-# set emails column names
-names(emailstbl) <- c("Ward","Email")
+sco_wpc_geo <- get_geojson()
 
-# join emails to main dataframe
-incumbents_df1 <- left_join(incumbents_df1,emailstbl, by = "Ward")
+polpartycol <- c('red','')
 
 server <- function(input, output, session) {
   
   pal <- colorFactor(palette = polpartycol,
-                     levels(incumbents_df1$Description))
+                     levels(targeting_data$Party))
   
   labels <- sprintf(
     "<strong>%s</strong><br/>%g majority<br/>%s",
-    incumbents_df1$Ward, incumbents_df1$Majority, incumbents_df1$Description
+    targeting_data$Constituency, 
+    targeting_data$MAJORITY, 
+    targeting_data$PARTY
   ) %>% lapply(htmltools::HTML)
   
   # pressing button on empty postcode input now creates map for centred leeds address
