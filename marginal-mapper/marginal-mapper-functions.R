@@ -2,7 +2,6 @@
 library(googleway)
 library(here)
 library(rgeos)
-library(geojsonio)
 
 
 # helper function

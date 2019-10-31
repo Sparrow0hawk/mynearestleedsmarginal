@@ -10,6 +10,7 @@ library(rgeos)
 
 
 # loading basic environment data
+# now loads geodata
 load(here("src","data","environdata.Rdata"), envir=.GlobalEnv)
 
 # specify data path
@@ -18,12 +19,7 @@ data_path <- here('src','data','target_data.csv')
 # load targeting dataframe
 targeting_data <- get_targeting(data_path)
 
-# load geojson data for scottish wpc
-sco_wpc_geo <- get_geojson()
-
-# pull out required constituencies
-target_geo <- sco_wpc_geo[match(targeting_data$constit_cd, sco_wpc_geo$PCON13CD),]
-
+# sort ordering of data
 targeting_data <- targeting_data[match(target_geo$PCON13CD, targeting_data$constit_cd),]
 
 # specify colours
