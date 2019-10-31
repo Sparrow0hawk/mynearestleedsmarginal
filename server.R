@@ -1,4 +1,5 @@
 # server.R for studentmarginals2019
+library(here)
 source(here('marginal-mapper','marginal-mapper-functions.R'))
 library(shiny)
 library(leaflet)
