@@ -33,13 +33,6 @@ pal <- colorFactor(palette = polpartycol,
 
 server <- function(input, output, session) {
   
-  labels <- sprintf(
-    "<strong>%s</strong><br/>%s majority<br/>%s",
-    targeting_data$CONSTITUENCY, 
-    as.character(targeting_data$MAJORITY), 
-    targeting_data$Party
-  ) %>% lapply(htmltools::HTML)
-  
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
   # key seats
@@ -52,7 +45,13 @@ server <- function(input, output, session) {
     {leafletOptions(maxZoom = 10)
     base_map(data = target_geo,
              dataframe = targeting_data,
-             labels = labels,
+             labels = sprintf(
+               "<strong>%s</strong><br/>%s majority<br/>%s <br/> <a href=%s>Click for link to events</a>",
+               targeting_data$CONSTITUENCY, 
+               as.character(targeting_data$MAJORITY), 
+               targeting_data$Party,
+               as.character(targeting_data$Link.to.doc)
+             ) %>% lapply(htmltools::HTML),
              category_field = 'Party',
              col_pal = pal
              )
@@ -81,14 +80,6 @@ server <- function(input, output, session) {
       # arranges by distance (nearest first) key seats list 
       arranged.dist_frame <- arrange(distance_frame, 
                                      distance_frame[,"Distance from points"])
-      
-      labels1 <- sprintf(
-        "<strong>%s</strong><br/>%g majority<br/>%s",
-        arranged.dist_frame$Constituency[1], 
-        arranged.dist_frame$MAJORITY[1], 
-        as.character(arranged.dist_frame$Party[1])
-      ) %>% lapply(htmltools::HTML)
-    }
     
     output$mymap <- renderLeaflet({
       leaflet() %>%
@@ -102,28 +93,34 @@ server <- function(input, output, session) {
                     fillColor = ~pal(arranged.dist_frame$Party), 
                     fillOpacity=0.7,
                     weight = 2,
-                    label = labels1) %>%
+                    popup = sprintf(
+                      "<strong>%s</strong><br/>%s majority<br/>%s <br/> <a href=%s>Click for link to events</a>",
+                      arranged.dist_frame$CONSTITUENCY, 
+                      as.character(arranged.dist_frame$MAJORITY), 
+                      arranged.dist_frame$Party,
+                      as.character(arranged.dist_frame$Link.to.doc)
+                    ) %>% lapply(htmltools::HTML)
+                    ) %>%
         addMarkers(data = points()$results$geometry$location)
     })
     
     
     output$value <- renderText({
-      HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                  border-top-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>",
-      "Your nearest marginal is ",as.character(arranged.dist_frame$Constituency[1]),'</div>'),
-      "<div style='border-color: rgb(230, 0, 71);
-                  border-bottom-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>")
+      HTML(paste0("<div class='top-marg'>",
+      "<strong>Your nearest 3 marginals are:</strong>",
+      "<div>1. ",as.character(arranged.dist_frame$Constituency[1]),
+      " - <a href=",as.character(arranged.dist_frame$Link.to.doc[1]),
+      ">Click for a link to events here!</a></div>",
+      "<div>2. ",as.character(arranged.dist_frame$Constituency[2]),
+      " - <a href=",as.character(arranged.dist_frame$Link.to.doc[2]),
+      ">Click for a link to events here!</a></div>",
+      "<div>3. ",as.character(arranged.dist_frame$Constituency[3]),
+      " - <a href=",as.character(arranged.dist_frame$Link.to.doc[3]),
+      ">Click for a link to events here!</a></div></div>")
+      )
       })
+    
+    }
     })
   
 }

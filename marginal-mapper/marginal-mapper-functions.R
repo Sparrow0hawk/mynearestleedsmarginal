@@ -71,7 +71,7 @@ base_map <- function(data, dataframe, labels, category_field, col_pal) {
                   dashArray = 5,
                   weight = 2,
                   group = "Constituency",
-                  label = labels)
+                  popup = labels)
   
   return(map)
 }
