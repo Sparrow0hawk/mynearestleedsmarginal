@@ -3,8 +3,8 @@
 require(leaflet)
 
 card_meta <- list(
-  t_ilte = 'mynearestleedsmarginal.com/studentmarginals2019',
-  u_rl = 'https://www.mynearestleedsmarginal.com/',
+  t_ilte = 'Scottish student marginals 2019',
+  u_rl = 'https://www.mynearestleedsmarginal.com/studentmarginals2019',
   img = 'https://mynearestleedsmarginal.com/shiny/src/img/mynearestleedsmarg.png',
   descrip_tion = 'Find your nearest marginal Scottish constituency and help campaign!'
 )
@@ -51,16 +51,18 @@ ui <- fluidPage(
   includeCSS("./src/css/mark6.1.css"),
 
   # UI title panel
-  titlePanel("Find my nearest Scottish Marginal 2019"),
+  tags$div(class='row',
+           titlePanel("Find my nearest Scottish marginal 2019")
+  ),
   # creates a side bar for postcode, button and slider
   sidebarLayout(
 
     sidebarPanel(
 
-      tags$p("Welcome to find my nearest Scottish Marginal 2019!"),
-      tags$p("You can use this tool to find your nearest Scottish marginal and help turnout Scotland red for Christmas!"),
+      tags$p("Welcome to find my nearest Scottish marginal 2019!"),
       tags$p("Enter your postcode below and press search to
-            find your nearest marginal and links to event pages."),
+            find your nearest marginal or click on the map to get a link
+             to details of campaigning."),
       tags$p(" "),
 
       # text input for postcode
