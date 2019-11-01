@@ -68,3 +68,46 @@ label {font-family: Open Sans
   font-size: 20px;
   text-align: center;
 }
+
+.left, .right {
+    position: relative;
+    height: 100%;
+    width: 50%;
+    float: left;
+    text-align: center;
+}
+
+.left:after {
+    content: '';
+    line-height: 0;
+    font-size: 0;
+    width: 0;
+    height: 0;
+    border-top: 50px solid transparent;
+    border-bottom: 100px solid #fff;
+    border-left: 30px solid transparent;
+    border-right: 0 solid #fff;
+    position: absolute;
+    top: -50px;
+    right: 0;
+}
+
+.right {
+    width: 50%;
+    text-align: center;
+}
+
+.right:before {
+    content: '';
+    line-height: 0;
+    font-size: 0;
+    width: 0;
+    height: 0;
+    border-top: 100px solid #fff;
+    border-bottom: 50px solid transparent;
+    border-left: 0px solid transparent;
+    border-right: 30px solid transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
