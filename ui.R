@@ -52,7 +52,12 @@ ui <- fluidPage(
 
   # UI title panel
   tags$div(class='row',
-           titlePanel("Find my nearest Scottish marginal 2019")
+           tags$div(class='left',
+                    titlePanel("Scottish Labour")
+           ),
+           tags$div(class='right',
+                    titlePanel("Marginal Finder")
+           )
   ),
   # creates a side bar for postcode, button and slider
   sidebarLayout(
