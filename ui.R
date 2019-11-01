@@ -53,7 +53,7 @@ ui <- fluidPage(
   # UI title panel
   tags$div(class='row',
            tags$div(class='left',
-                    titlePanel("Scottish Labour")
+                    titlePanel("Scottish Labour", windowTitle = "Scottish Labour marginal Finder 2019")
            ),
            tags$div(class='right',
                     titlePanel("Marginal Finder")
