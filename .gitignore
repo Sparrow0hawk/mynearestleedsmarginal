@@ -6,4 +6,4 @@ environdata.RData
 emails2019.csv
 packrat/lib*/
 packrat/src/*
-target_data.csv
+target_data*.csv
