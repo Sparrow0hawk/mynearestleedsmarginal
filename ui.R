@@ -4,8 +4,8 @@ require(leaflet)
 
 card_meta <- list(
   t_ilte = 'Scottish student marginals 2019',
-  u_rl = 'https://www.mynearestleedsmarginal.com/studentmarginals2019',
-  img = 'https://mynearestleedsmarginal.com/shiny/src/img/mynearestleedsmarg.png',
+  u_rl = 'https://findmyscottishmarginal.com/',
+  img = 'https://findmyscottishmarginal.com/src/img/mynearestleedsmarg.png',
   descrip_tion = 'Find your nearest marginal Scottish constituency and help campaign!'
 )
 
