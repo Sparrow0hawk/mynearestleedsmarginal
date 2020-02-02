@@ -11,13 +11,13 @@ library(rgeos)
 options(shiny.sanitize.errors = FALSE)
 
 # load all preparaed data
-load("./src/data/testdata1.RData", envir=.GlobalEnv)
+load("./assets/data/testdata1.RData", envir=.GlobalEnv)
 
 # load key seats list
-keyseats <- as.character(read.csv("./src/data/keyseatlist.csv", header=FALSE)$V1)
+keyseats <- as.character(read.csv("./assets/data/keyseatlist.csv", header=FALSE)$V1)
 
 # load emails list
-emailstbl <- data.frame(read.csv("./src/data/emails2019.csv", encoding = "latin", header=FALSE))
+emailstbl <- data.frame(read.csv("./assets/data/emails2019.csv", encoding = "latin", header=FALSE))
 
 # set emails column names
 names(emailstbl) <- c("Ward","Email")

@@ -5,14 +5,14 @@ require(leaflet)
 card_meta <- list(
   t_ilte = 'mynearestleedsmarginal.com',
   u_rl = 'https://www.mynearestleedsmarginal.com/',
-  img = 'https://mynearestleedsmarginal.com/shiny/src/img/mynearestleedsmarg.png',
+  img = 'https://mynearestleedsmarginal.com/shiny/assets/img/mynearestleedsmarg.png',
   descrip_tion = 'Find your nearest marginal council seat and help campaign!'
 )
 
 # anything going into fluidPage goes into app
 ui <- fluidPage(
   tags$head(
-    includeScript("./src/js/gtag1.js"),
+    includeScript("./assets/js/gtag1.js"),
     # section for twitter card
     tags$meta(name = 'twitter:card', content = 'summary'),
     tags$meta(name = 'twitter:title', content = card_meta$t_ilte),
@@ -48,7 +48,7 @@ ui <- fluidPage(
             ))
             ),
   
-  includeCSS("./src/css/mark6.1.css"),
+  includeCSS("./assets/css/mark6.1.css"),
   
   # UI title panel
   titlePanel("My Nearest Leeds 2019 Marginal"),
@@ -86,7 +86,7 @@ ui <- fluidPage(
       
     ),
     mainPanel(
-      #tags$body(includeScript(".src/js/bookmark1.js")),
+      #tags$body(includeScript("./assets/js/bookmark1.js")),
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
