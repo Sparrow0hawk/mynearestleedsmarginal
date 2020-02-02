@@ -51,7 +51,11 @@ ui <- fluidPage(
   includeCSS("./assets/css/mark6.1.css"),
   
   # UI title panel
-  titlePanel("My Nearest Leeds 2019 Marginal"),
+  tags$div(class='row',
+           tags$div(class='banner-title',
+           titlePanel("My Nearest Leeds 2019 Marginal")
+           )
+  ),
   # creates a side bar for postcode, button and slider
   sidebarLayout(
 
