@@ -65,7 +65,14 @@ secplace_2019 <- result_2019[result_2019$majority != 0,]
 
 # create base frame to work with
 
-base_frame <- secplace_2018[,c('Surname','Forename','Description','Ward','majority')]
+base_frame <- secplace_2018[,c('Surname','Forename',
+                               'Description','Ward',
+                               'majority')]
+
+# create single name variable and drop two other name columns
+base_frame <- base_frame %>%
+  mutate(fullname = paste0(Forename,' ',Surname)) %>%
+  select(-c('Surname','Forename'))
 
 # add 2019 majority onto base frame
 base_frame.2019 <- base_frame %>% 
