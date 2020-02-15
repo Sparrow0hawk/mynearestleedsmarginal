@@ -1,10 +1,17 @@
 # scrapbook file for data manipulation
 library(dplyr)
 library(here)
+library(stringr)
 
-data_2019 <- read.csv("assets/data/Leeds_LE2019_results.csv", row.names = 'X')
+data_2019 <- read.csv("assets/data/Leeds_LE2019_results.csv", row.names = 'X',
+                      stringsAsFactors = TRUE)
 
-data_2018 <- read.csv("assets/data/2018_results_share1.csv", row.names = 'X')
+data_2018 <- read.csv("assets/data/2018_results_share1.csv", row.names = 'X',
+                      stringsAsFactors = TRUE)
+
+data_2018$Ward <- trimws(data_2018$Ward)
+
+data_2019$Ward <- trimws(data_2019$Ward)
 
 by_votes <- data_2018 %>% arrange(Ward, Votes) %>%
   group_by(Ward) %>% 
@@ -81,3 +88,30 @@ base_frame.2019 <- base_frame %>%
             suffix = c('_2018','_2019')
             )
 
+# extract from RData ward, constituency, link dataframe
+
+ward_const_link <- incumbents_df1 %>%
+  select(c('Ward','Constituency','Link'))
+
+# write it out to file
+write.csv(ward_const_link, here('assets','data','ward_const_link.csv'))
+
+ward_const_link <- read.csv(here('assets','data','ward_const_link.csv'),
+                            row.names = 'X')
+##### creating new 2020 dataframe
+
+main_file_2020 <- base_frame.2019 %>%
+  left_join(ward_const_link, by = c('Ward' = 'Ward'))
+
+# normalizing party names
+# remove cooperative party and candidate
+
+main_file_2020$Description <- str_remove(main_file_2020$Description,
+                                         "and Co-operative ")
+
+main_file_2020$Description <- str_remove(main_file_2020$Description,
+                                         " Candidate")
+
+unique(main_file_2020$Description)
+
+write.csv(main_file_2020, here('assets','data','mainfile_2020.csv'))
