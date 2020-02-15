@@ -1,9 +1,10 @@
 # scrapbook file for data manipulation
 library(dplyr)
+library(here)
 
-data_2019 <- read.csv("assets/data/Leeds_LE2019_results.csv")
+data_2019 <- read.csv("assets/data/Leeds_LE2019_results.csv", row.names = 'X')
 
-data_2018 <- read.csv("assets/data/2018_results_share1.csv")
+data_2018 <- read.csv("assets/data/2018_results_share1.csv", row.names = 'X')
 
 by_votes <- data_2018 %>% arrange(Ward, Votes) %>%
   group_by(Ward) %>% 
@@ -11,14 +12,12 @@ by_votes <- data_2018 %>% arrange(Ward, Votes) %>%
   # rank orders ascending
   mutate(rank = rank(-Votes, ties.method = "first"))
 
-hr.frame <- by_votes[by_votes$Ward == 'Hunslet and Riverside',]
-
 top_2 <- by_votes[by_votes$rank == 2 | by_votes$rank == 3,]
 
 majority_by_votes <- top_2 %>% group_by(Ward) %>%
   mutate(majority = (Votes - lag(Votes, default = first(Votes))))
 
-
+# functionize above
 calc_majority <- function(dataframe,position_to_start=1, position_to_compare) {
   #' Calculating majority function
   #' This function takes a dataframe with expecting votes, wards and candidates
@@ -49,4 +48,29 @@ calc_majority <- function(dataframe,position_to_start=1, position_to_compare) {
   return(majority_by_votes)
 }
 
-test <- calc_majority(data_2019,1, 2)
+##### Wrangling section using function #####
+# get 2018 and 2019 data for combining
+
+# get majorities for candidates who came 2nd in 2018 
+# and maybe restanding in 2020
+result_2018 <- calc_majority(data_2018,2, 4)
+
+# get majorities from 2019 for side by side show
+result_2019 <- calc_majority(data_2019, 1, 2)
+
+# get all 2nd place candidates and majorities
+secplace_2018 <- result_2018[result_2018$majority != 0,]
+
+secplace_2019 <- result_2019[result_2019$majority != 0,]
+
+# create base frame to work with
+
+base_frame <- secplace_2018[,c('Surname','Forename','Description','Ward','majority')]
+
+# add 2019 majority onto base frame
+base_frame.2019 <- base_frame %>% 
+  left_join(secplace_2019[,c('Ward','majority')], 
+            by = c('Ward' = 'Ward'),
+            suffix = c('_2018','_2019')
+            )
+
