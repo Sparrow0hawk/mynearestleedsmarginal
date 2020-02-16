@@ -290,7 +290,7 @@ server <- function(input, output, session) {
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
-        addMarkers(data = points()$results$geometry$location)
+        addMarkers(data = points2()$results$geometry$location)
     })
     
     output$value <- renderText({
