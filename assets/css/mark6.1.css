@@ -86,7 +86,7 @@ label {
   padding: 2px;
   text-align: center;
   color: white;
-  border: 4px solid white;
+  border: 4px solid transparent;
   transition: border 1s;
 }
 
@@ -94,7 +94,25 @@ label {
   color: white;
   text-decoration: none;
   border: 4px solid black;
+}
 
+.result-bottom-box {
+  border-color: rgb(230, 0, 71);
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  font-size: 20px;
+  text-align: center;
+  padding: 5px;
+}
+
+.result-top-box {
+  border-color: rgb(230, 0, 71);
+  border-top-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  font-size: 20px;
+  text-align: center;
 }
 
 #help1{

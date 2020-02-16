@@ -153,38 +153,20 @@ server <- function(input, output, session) {
     
     
     output$value <- renderText({
-      HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                  border-top-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>",
+      HTML(paste0("<div class='result-top-box'>",
       "Your nearest marginal is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
       })
     
     if (is.na(flt_df_2016majclose$Email[1])){
       output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton' target='_blank'",
+        lnk <- HTML(paste0("<div class='result-bottom-box'>",
+                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
                            "onclick=ga('send','event','click','near_link','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
         HTML(paste(lnk))})
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                            "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton' target='_blank'",
+        mailto <- HTML(paste0("<div class='result-bottom-box'>",
+                            "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
                             "onclick=ga('send','event','click','near_mailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
         HTML(paste(mailto))})
     }
@@ -294,39 +276,21 @@ server <- function(input, output, session) {
     })
     
     output$value <- renderText({
-      HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                  border-top-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>",
+      HTML(paste0("<div class='result-top-box'>",
                   "Your local ward is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
     })
     
     
     if (is.na(flt_df_2016majclose$Email[1])){
       output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton' target='_blank'",
+        lnk <- HTML(paste0("<div class='result-bottom-box'>",
+                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
                            "onclick=ga('send','event','click','mylink','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
         HTML(paste(lnk))})
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                              border-bottom-style: solid;
-                              border-left-style: solid;
-                              border-right-style: solid;
-                              font-size: 20px;
-                              text-align: center;
-                              '>",
-                              "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton' target='_blank'",
+        mailto <- HTML(paste0("<div class='result-bottom-box'>",
+                              "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
                               "onclick=ga('send','event','click','mymailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
         HTML(paste(mailto))})
     }
