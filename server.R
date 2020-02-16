@@ -14,6 +14,11 @@ options(shiny.sanitize.errors = TRUE)
 # load all preparaed data
 load(here("assets","data","testdata1.RData"), envir=.GlobalEnv)
 
+# load googleways key file
+key1 <- read.csv(here("assets","data","googleways_key.txt"),
+                 row.names = 'X',
+                 stringsAsFactors = FALSE)[[1]]
+
 # load 2020 main data
 incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'), row.names = 'X')
 
@@ -216,6 +221,8 @@ server <- function(input, output, session) {
     } else
       a2 <- google_geocode(as.character(input$postcode), key = key1)},
     ignoreNULL= TRUE)
+  
+  
   
   observeEvent(input$my_ward, {
     
