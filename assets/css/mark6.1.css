@@ -87,13 +87,13 @@ label {
   text-align: center;
   color: white;
   border: 4px solid transparent;
-  transition: border 1s;
+  transition: background-color 1s;
 }
 
 .Linkbutton2:hover {
   color: white;
   text-decoration: none;
-  border: 4px solid black;
+  background-color: grey;
 }
 
 .result-bottom-box {
