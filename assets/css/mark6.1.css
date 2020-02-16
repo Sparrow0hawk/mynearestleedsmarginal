@@ -57,13 +57,50 @@ p {
     font-size: 20px;
 }
 
-strong {font-family: Open Sans
+strong {
+  font-family: Open Sans
 }
 
-button {font-family: Open Sans
+button {
+  font-family: Open Sans
 }
 
-label {font-family: Open Sans
+label {
+  font-family: Open Sans
+}
+
+.Linkbutton {
+  display: block;
+  width: 250px;
+  background: rgb(230, 0, 71);
+  padding: 5px;
+  text-align: center;
+  color: white;
+  margin: auto;
+}
+
+.Linkbutton2 {
+  display: inline-block;
+  width: 200px;
+  background: rgb(230, 0, 71);
+  padding: 2px;
+  text-align: center;
+  color: white;
+  border: 4px solid white;
+  transition: border 1s;
+}
+
+.Linkbutton2:hover {
+  color: white;
+  text-decoration: none;
+  border: 4px solid black;
+
+}
+
+#help1{
+  font-size: 10px;
+  text-align: center;
+  font-family: open sans;
 }
 
 </style>

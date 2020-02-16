@@ -23,6 +23,9 @@ keyseats <- as.character(read.csv(here("assets","data","keyseatlist.csv"), heade
 # load emails list
 emailstbl <- data.frame(read.csv(here("assets","data","emails2019.csv"), encoding = "latin", header=FALSE))
 
+# load colours
+polpartycol <- c('blue','black','green','red','orange','purple')
+
 # set emails column names
 names(emailstbl) <- c("Ward","Email")
 
@@ -229,10 +232,12 @@ server <- function(input, output, session) {
       names(incumbents_df1) <- c("Party",   #1
                                  "Ward",  #2
                                  "Majority", #3
-                                 "Constituency", #4
-                                 "Link",  #5,
-                                 "Email", #6
-                                 "Distance from points")  #7
+                                 "Fullname", #4
+                                 "Majority_2019", #5
+                                 "Constituency", #6
+                                 "Link",  #7
+                                 "Email", #8
+                                 "Distance from points")  #9
       
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
