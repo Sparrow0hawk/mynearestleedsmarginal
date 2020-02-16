@@ -12,7 +12,7 @@ library(rgeos)
 options(shiny.sanitize.errors = TRUE)
 
 # load all preparaed data
-load(here("assets","data","testdata1.RData"), envir=.GlobalEnv)
+load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
 
 # load googleways key file
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
