@@ -8,6 +8,7 @@ library(sp)
 # not needed loading data
 library(dplyr)
 library(rgeos)
+library(geojsonio)
 
 options(shiny.sanitize.errors = TRUE)
 
@@ -15,11 +16,10 @@ options(shiny.sanitize.errors = TRUE)
 # gives magic number error
 #load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
 
-geodata <- readRDS(here("assets","data","geodata.Rdata"))
+shape_leeds <- geojson_read(here("assets","data","leedswards2018.geojson"),
+                            what = "sp")
 
-lst <- geodata[1:6]
-
-shape_leeds <- geodata[7][[1]]
+lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
 # load googleways key file
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
@@ -64,7 +64,7 @@ server <- function(input, output, session) {
   # key seats
   points <- eventReactive(input$go, {
     if (input$postcode == ""){
-      a <- lst[sample(c(1,3,5))]
+      a <- google_geocode(as.character(lst[sample(c(1,2,3), size=1),]), key = key1)
     } else
       a <- google_geocode(as.character(input$postcode), key = key1)},
     ignoreNULL= TRUE)
@@ -206,7 +206,7 @@ server <- function(input, output, session) {
   
   points2 <- eventReactive(input$my_ward, {
     if (input$postcode == ""){
-      a2 <- lst[sample(c(1,3,5))]
+      a2 <- google_geocode(as.character(lst[sample(c(1,2,3), size=1),]), key = key1)
     } else
       a2 <- google_geocode(as.character(input$postcode), key = key1)},
     ignoreNULL= TRUE)
