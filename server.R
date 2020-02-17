@@ -12,7 +12,14 @@ library(rgeos)
 options(shiny.sanitize.errors = TRUE)
 
 # load all preparaed data
-load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
+# gives magic number error
+#load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
+
+geodata <- readRDS(here("assets","data","geodata.Rdata"))
+
+lst <- geodata[1:6]
+
+shape_leeds <- geodata[7][[1]]
 
 # load googleways key file
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
