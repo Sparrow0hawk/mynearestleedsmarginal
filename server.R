@@ -1,6 +1,7 @@
 # server.R for mynearestleedsmarginal.com
 
 library(shiny)
+library(here)
 library(leaflet)
 library(googleway)
 library(sp)
@@ -8,22 +9,38 @@ library(sp)
 library(dplyr)
 library(rgeos)
 
-options(shiny.sanitize.errors = FALSE)
+options(shiny.sanitize.errors = TRUE)
 
 # load all preparaed data
-load("./assets/data/testdata1.RData", envir=.GlobalEnv)
+load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
+
+# load googleways key file
+key1 <- read.csv(here("assets","data","googleways_key.txt"),
+                 row.names = 'X',
+                 stringsAsFactors = FALSE)[[1]]
+
+# load 2020 main data
+incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'), row.names = 'X')
 
 # load key seats list
-keyseats <- as.character(read.csv("./assets/data/keyseatlist.csv", header=FALSE)$V1)
+keyseats <- as.character(read.csv(here("assets","data","keyseatlist.csv"), header=FALSE)$V1)
 
 # load emails list
-emailstbl <- data.frame(read.csv("./assets/data/emails2019.csv", encoding = "latin", header=FALSE))
+emailstbl <- data.frame(read.csv(here("assets","data","emails2019.csv"), encoding = "latin", header=FALSE))
+
+# load colours
+polpartycol <- c('blue','black','green','red','orange','purple')
 
 # set emails column names
 names(emailstbl) <- c("Ward","Email")
 
 # join emails to main dataframe
-incumbents_df1 <- left_join(incumbents_df1,emailstbl, by = "Ward")
+incumbents_df1 <- left_join(incumbents_df1, emailstbl, by = "Ward")
+
+# order main dataframe by maps data
+incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward, 
+                                             shape_leeds$WARD_NAME)),]
+
 
 server <- function(input, output, session) {
   
@@ -32,7 +49,7 @@ server <- function(input, output, session) {
   
   labels <- sprintf(
     "<strong>%s</strong><br/>%g majority<br/>%s",
-    incumbents_df1$Ward, incumbents_df1$Majority, incumbents_df1$Description
+    incumbents_df1$Ward, incumbents_df1$majority_2018, incumbents_df1$Description
   ) %>% lapply(htmltools::HTML)
   
   # pressing button on empty postcode input now creates map for centred leeds address
@@ -75,10 +92,12 @@ server <- function(input, output, session) {
       names(incumbents_df1) <- c("Party",   #1
                              "Ward",  #2
                              "Majority", #3
-                             "Constituency", #4
-                             "Link",  #5
-                             "Email", #6
-                             "Distance from points")  #7
+                             "Fullname", #4
+                             "Majority_2019", #5
+                             "Constituency", #6
+                             "Link",  #7
+                             "Email", #8
+                             "Distance from points")  #9
       
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
@@ -134,38 +153,20 @@ server <- function(input, output, session) {
     
     
     output$value <- renderText({
-      HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                  border-top-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>",
+      HTML(paste0("<div class='result-top-box'>",
       "Your nearest marginal is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
       })
     
     if (is.na(flt_df_2016majclose$Email[1])){
       output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton' target='_blank'",
+        lnk <- HTML(paste0("<div class='result-bottom-box'>",
+                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
                            "onclick=ga('send','event','click','near_link','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
         HTML(paste(lnk))})
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                            "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton' target='_blank'",
+        mailto <- HTML(paste0("<div class='result-bottom-box'>",
+                            "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
                             "onclick=ga('send','event','click','near_mailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
         HTML(paste(mailto))})
     }
@@ -203,6 +204,8 @@ server <- function(input, output, session) {
       a2 <- google_geocode(as.character(input$postcode), key = key1)},
     ignoreNULL= TRUE)
   
+  
+  
   observeEvent(input$my_ward, {
     
     if (!is.null(points2)) {
@@ -218,10 +221,12 @@ server <- function(input, output, session) {
       names(incumbents_df1) <- c("Party",   #1
                                  "Ward",  #2
                                  "Majority", #3
-                                 "Constituency", #4
-                                 "Link",  #5,
-                                 "Email", #6
-                                 "Distance from points")  #7
+                                 "Fullname", #4
+                                 "Majority_2019", #5
+                                 "Constituency", #6
+                                 "Link",  #7
+                                 "Email", #8
+                                 "Distance from points")  #9
       
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
@@ -267,43 +272,25 @@ server <- function(input, output, session) {
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
-        addMarkers(data = points()$results$geometry$location)
+        addMarkers(data = points2()$results$geometry$location)
     })
     
     output$value <- renderText({
-      HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                  border-top-style: solid;
-                  border-left-style: solid;
-                  border-right-style: solid;
-                  font-size: 20px;
-                  text-align: center;
-                  '>",
+      HTML(paste0("<div class='result-top-box'>",
                   "Your local ward is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
     })
     
     
     if (is.na(flt_df_2016majclose$Email[1])){
       output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                           border-bottom-style: solid;
-                           border-left-style: solid;
-                           border-right-style: solid;
-                           font-size: 20px;
-                           text-align: center;
-                           '>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton' target='_blank'",
+        lnk <- HTML(paste0("<div class='result-bottom-box'>",
+                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
                            "onclick=ga('send','event','click','mylink','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
         HTML(paste(lnk))})
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div style='border-color: rgb(230, 0, 71);
-                              border-bottom-style: solid;
-                              border-left-style: solid;
-                              border-right-style: solid;
-                              font-size: 20px;
-                              text-align: center;
-                              '>",
-                              "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton' target='_blank'",
+        mailto <- HTML(paste0("<div class='result-bottom-box'>",
+                              "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
                               "onclick=ga('send','event','click','mymailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
         HTML(paste(mailto))})
     }
