@@ -57,13 +57,68 @@ p {
     font-size: 20px;
 }
 
-strong {font-family: Open Sans
+strong {
+  font-family: Open Sans
 }
 
-button {font-family: Open Sans
+button {
+  font-family: Open Sans
 }
 
-label {font-family: Open Sans
+label {
+  font-family: Open Sans
+}
+
+.Linkbutton {
+  display: block;
+  width: 250px;
+  background: rgb(230, 0, 71);
+  padding: 5px;
+  text-align: center;
+  color: white;
+  margin: auto;
+}
+
+.Linkbutton2 {
+  display: inline-block;
+  width: 200px;
+  background: rgb(230, 0, 71);
+  padding: 2px;
+  text-align: center;
+  color: white;
+  border: 4px solid transparent;
+  transition: background-color 1s;
+}
+
+.Linkbutton2:hover {
+  color: white;
+  text-decoration: none;
+  background-color: grey;
+}
+
+.result-bottom-box {
+  border-color: rgb(230, 0, 71);
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  font-size: 20px;
+  text-align: center;
+  padding: 5px;
+}
+
+.result-top-box {
+  border-color: rgb(230, 0, 71);
+  border-top-style: solid;
+  border-left-style: solid;
+  border-right-style: solid;
+  font-size: 20px;
+  text-align: center;
+}
+
+#help1{
+  font-size: 10px;
+  text-align: center;
+  font-family: open sans;
 }
 
 </style>
