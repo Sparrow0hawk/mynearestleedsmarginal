@@ -26,13 +26,39 @@ key1 <- read.csv(here("assets","data","googleways_key.txt"),
                  stringsAsFactors = FALSE)[[1]]
 
 # load 2020 main data
-incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'), row.names = 'X')
+incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'),
+                           row.names = 'X',
+                           stringsAsFactors = FALSE)
 
 # load key seats list
-keyseats <- as.character(read.csv(here("assets","data","keyseatlist.csv"), header=FALSE)$V1)
+if( file.exists(here("assets","data","keyseatlist.csv"))) {
+  
+  keyseats <- as.character(
+    read.csv(
+      here("assets","data","keyseatlist.csv"), header=FALSE)$V1
+    )
+  
+} else {
+  
+  keyseats <- as.character(
+    read.csv(
+      here("assets","data","allwardlist.csv"), header=FALSE)$V1
+  )
+}
 
 # load emails list
-emailstbl <- data.frame(read.csv(here("assets","data","emails2019.csv"), encoding = "latin", header=FALSE))
+if( file.exists(here("assets","data","emails2019.csv"))) {
+  
+  emailstbl <- read.csv(
+    here("assets","data","emails2019.csv"), 
+    encoding = "latin", header=FALSE)
+  
+} else {
+  
+  emailstbl <- read.csv(
+    here("assets","data","emailblank.csv"), 
+    encoding = "latin", header=FALSE)
+}
 
 # load colours
 polpartycol <- c('blue','black','green','red','orange','purple')
@@ -51,7 +77,7 @@ incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward,
 server <- function(input, output, session) {
   
   pal <- colorFactor(palette = polpartycol,
-                     levels(incumbents_df1$Description))
+                     levels(as.factor(incumbents_df1$Description)))
   
   labels <- sprintf(
     "<strong>%s</strong><br/>%g majority<br/>%s",
