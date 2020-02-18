@@ -8,7 +8,7 @@ library(sp)
 # not needed loading data
 library(dplyr)
 library(rgeos)
-library(geojsonio)
+library(rgdal)
 
 options(shiny.sanitize.errors = TRUE)
 
@@ -16,8 +16,7 @@ options(shiny.sanitize.errors = TRUE)
 # gives magic number error
 #load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
 
-shape_leeds <- geojson_read(here("assets","data","leedswards2018.geojson"),
-                            what = "sp")
+shape_leeds <- readOGR(here("assets","data","leedswards2018.geojson"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
