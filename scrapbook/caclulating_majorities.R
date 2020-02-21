@@ -8,10 +8,27 @@ data_2019 <- read.csv("assets/data/Leeds_LE2019_results.csv", row.names = 'X',
 
 data_2018 <- read.csv("assets/data/2018_results_share1.csv", row.names = 'X',
                       stringsAsFactors = TRUE)
+## data formatting
 
+# remove trailing whitespace
 data_2018$Ward <- trimws(data_2018$Ward)
 
 data_2019$Ward <- trimws(data_2019$Ward)
+
+# normalizing party names
+# remove cooperative party and candidate
+
+data_2018$Description <- str_remove(data_2018$Description,
+                                         "and Co-operative ")
+
+data_2018$Description <- str_remove(data_2018$Description,
+                                         " Candidate")
+
+data_2019$Description <- str_remove(data_2019$Description,
+                                    "and Co-operative ")
+
+data_2019$Description <- str_remove(data_2019$Description,
+                                    " Candidate")
 
 by_votes <- data_2018 %>% arrange(Ward, Votes) %>%
   group_by(Ward) %>% 
@@ -83,7 +100,7 @@ base_frame <- base_frame %>%
 
 # add 2019 majority onto base frame
 base_frame.2019 <- base_frame %>% 
-  left_join(secplace_2019[,c('Ward','majority')], 
+  left_join(secplace_2019[,c('Ward','majority','Description')], 
             by = c('Ward' = 'Ward'),
             suffix = c('_2018','_2019')
             )
@@ -103,15 +120,8 @@ ward_const_link <- read.csv(here('assets','data','ward_const_link.csv'),
 main_file_2020 <- base_frame.2019 %>%
   left_join(ward_const_link, by = c('Ward' = 'Ward'))
 
-# normalizing party names
-# remove cooperative party and candidate
+unique(main_file_2020$Description_2018)
 
-main_file_2020$Description <- str_remove(main_file_2020$Description,
-                                         "and Co-operative ")
-
-main_file_2020$Description <- str_remove(main_file_2020$Description,
-                                         " Candidate")
-
-unique(main_file_2020$Description)
+unique(main_file_2020$Description_2019)
 
 write.csv(main_file_2020, here('assets','data','mainfile_2020.csv'))
