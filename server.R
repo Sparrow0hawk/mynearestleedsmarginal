@@ -45,11 +45,23 @@ incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward,
 server <- function(input, output, session) {
   
   pal <- colorFactor(palette = polpartycol,
+<<<<<<< Updated upstream
                      levels(incumbents_df1$Description))
+=======
+                     levels(as.factor(incumbents_df1$Description_2018)))
+>>>>>>> Stashed changes
   
   labels <- sprintf(
-    "<strong>%s</strong><br/>%g majority<br/>%s",
-    incumbents_df1$Ward, incumbents_df1$majority_2018, incumbents_df1$Description
+    "<strong>%s</strong><br/>
+    2018 Winner - %s <br/>
+    2018 majority - %g<br/>
+    2019 Winner - %s <br/>
+    2019 majority - %g",
+    incumbents_df1$Ward, 
+    incumbents_df1$majority_2018, 
+    incumbents_df1$Description_2018,
+    incumbents_df1$Description_2019,
+    incumbents_df1$majority_2019
   ) %>% lapply(htmltools::HTML)
   
   # pressing button on empty postcode input now creates map for centred leeds address
@@ -69,7 +81,7 @@ server <- function(input, output, session) {
       addPolygons(data = shape_leeds,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = ~pal(incumbents_df1$Description), 
+                  fillColor = ~pal(incumbents_df1$Description_2018), 
                   fillOpacity=0.3,
                   dashArray = 5,
                   weight = 2,
@@ -182,7 +194,7 @@ server <- function(input, output, session) {
         addPolygons(data = shape_leeds,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(incumbents_df1$Description), 
+                    fillColor = ~pal(incumbents_df1$Description_2018), 
                     fillOpacity=0.3,
                     dashArray = 5,
                     weight = 2,
