@@ -77,8 +77,12 @@ incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward,
 server <- function(input, output, session) {
 
   pal <- colorFactor(palette = polpartycol,
+<<<<<<< Updated upstream
+                     levels(incumbents_df1$Description))
+=======
                      levels(as.factor(incumbents_df1$Description_2018)))
 
+>>>>>>> 3a8489685a7023a47d22ae84114cee6e02386c04
   labels <- sprintf(
     "<strong>%s</strong><br/>
     2018 Winner - %s <br/>
@@ -172,7 +176,7 @@ server <- function(input, output, session) {
       df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
                                     as.character(flt_df_2016majclose$Ward[1]),]
 
-      
+
       labels1 <- sprintf(
         "<strong>%s</strong><br/>
     2018 Winner - %s <br/>
