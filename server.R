@@ -86,8 +86,8 @@ server <- function(input, output, session) {
     2019 Winner - %s <br/>
     2019 majority - %g",
     incumbents_df1$Ward,
-    incumbents_df1$majority_2018,
     incumbents_df1$Description_2018,
+    incumbents_df1$majority_2018,
     incumbents_df1$Description_2019,
     incumbents_df1$majority_2019
   ) %>% lapply(htmltools::HTML)
@@ -129,15 +129,16 @@ server <- function(input, output, session) {
 
       incumbents_df1 <- cbind(incumbents_df1,points_df)
 
-      names(incumbents_df1) <- c("Party",   #1
-                             "Ward",  #2
-                             "Majority", #3
-                             "Fullname", #4
-                             "Majority_2019", #5
-                             "Constituency", #6
-                             "Link",  #7
-                             "Email", #8
-                             "Distance from points")  #9
+      names(incumbents_df1) <- c("Description_2018",   #1
+                                 "Ward",  #2
+                                 "majority_2018", #3
+                                 "Fullname", #4
+                                 "majority_2019", #5
+                                 "Description_2019", #6
+                                 "Constituency", #7
+                                 "Link",  #8
+                                 "Email", #9
+                                 "Distance from points")  #10
 
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
@@ -171,10 +172,18 @@ server <- function(input, output, session) {
       df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
                                     as.character(flt_df_2016majclose$Ward[1]),]
 
-
+      
       labels1 <- sprintf(
-        "<strong>%s</strong><br/>%g majority<br/>%s",
-        flt_df_2016majclose$Ward[1], flt_df_2016majclose$Majority[1], as.character(flt_df_2016majclose$Party[1])
+        "<strong>%s</strong><br/>
+    2018 Winner - %s <br/>
+    2018 majority - %g<br/>
+    2019 Winner - %s <br/>
+    2019 majority - %g",
+        flt_df_2016majclose$Ward[1],
+        flt_df_2016majclose$Description_2018[1],
+        flt_df_2016majclose$majority_2018[1],
+        flt_df_2016majclose$Description_2019[1],
+        flt_df_2016majclose$majority_2019[1]
       ) %>% lapply(htmltools::HTML)
     }
 
@@ -184,7 +193,7 @@ server <- function(input, output, session) {
         addPolygons(data = df_2016majmap,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Party[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
+                    fillColor = ~pal(df_2016majclose$Description_2018[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
@@ -258,15 +267,16 @@ server <- function(input, output, session) {
 
       incumbents_df1 <- cbind(incumbents_df1,points_df2)
 
-      names(incumbents_df1) <- c("Party",   #1
+      names(incumbents_df1) <- c("Description_2018",   #1
                                  "Ward",  #2
-                                 "Majority", #3
+                                 "majority_2018", #3
                                  "Fullname", #4
-                                 "Majority_2019", #5
-                                 "Constituency", #6
-                                 "Link",  #7
-                                 "Email", #8
-                                 "Distance from points")  #9
+                                 "majority_2019", #5
+                                 "Description_2019", #6
+                                 "Constituency", #7
+                                 "Link",  #8
+                                 "Email", #9
+                                 "Distance from points")  #10
 
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
@@ -297,8 +307,16 @@ server <- function(input, output, session) {
 
 
       labels1 <- sprintf(
-        "<strong>%s</strong><br/>%g majority<br/>%s",
-        flt_df_2016majclose$Ward[1], flt_df_2016majclose$Majority[1], as.character(flt_df_2016majclose$Party[1])
+        "<strong>%s</strong><br/>
+    2018 Winner - %s <br/>
+    2018 majority - %g<br/>
+    2019 Winner - %s <br/>
+    2019 majority - %g",
+        flt_df_2016majclose$Ward[1],
+        flt_df_2016majclose$Description_2018[1],
+        flt_df_2016majclose$majority_2018[1],
+        flt_df_2016majclose$Description_2019[1],
+        flt_df_2016majclose$majority_2019[1]
       ) %>% lapply(htmltools::HTML)
     }
 
@@ -308,7 +326,7 @@ server <- function(input, output, session) {
         addPolygons(data = df_2016majmap,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Party[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
+                    fillColor = ~pal(df_2016majclose$Description_2018[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
