@@ -308,7 +308,7 @@ server <- function(input, output, session) {
         addPolygons(data = df_2016majmap,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Party[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]), 
+                    fillColor = ~pal(df_2016majclose$Party[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
