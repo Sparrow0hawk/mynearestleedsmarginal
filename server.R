@@ -1,5 +1,5 @@
 # server.R for mynearestleedsmarginal.com
-
+source(here('R','utils.R'))
 library(shiny)
 library(here)
 library(leaflet)
@@ -47,10 +47,10 @@ if( file.exists(here("assets","data","keyseatlist.csv"))) {
 }
 
 # load emails list
-if( file.exists(here("assets","data","emails2019.csv"))) {
+if( file.exists(here("assets","data","emails2020.csv"))) {
 
   emailstbl <- read.csv(
-    here("assets","data","emails2019.csv"),
+    here("assets","data","emails2020.csv"),
     encoding = "latin", header=FALSE)
 
 } else {
@@ -79,18 +79,7 @@ server <- function(input, output, session) {
   pal <- colorFactor(palette = polpartycol,
                      levels(as.factor(incumbents_df1$Description_2018)))
 
-  labels <- sprintf(
-    "<strong>%s</strong><br/>
-    2018 Winner - %s <br/>
-    2018 majority - %g<br/>
-    2019 Winner - %s <br/>
-    2019 majority - %g",
-    incumbents_df1$Ward,
-    incumbents_df1$Description_2018,
-    incumbents_df1$majority_2018,
-    incumbents_df1$Description_2019,
-    incumbents_df1$majority_2019
-  ) %>% lapply(htmltools::HTML)
+  labels <- generate_ward_labels(incumbents_df1)
 
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
@@ -173,18 +162,7 @@ server <- function(input, output, session) {
                                     as.character(flt_df_2016majclose$Ward[1]),]
 
 
-      labels1 <- sprintf(
-        "<strong>%s</strong><br/>
-    2018 Winner - %s <br/>
-    2018 majority - %g<br/>
-    2019 Winner - %s <br/>
-    2019 majority - %g",
-        flt_df_2016majclose$Ward[1],
-        flt_df_2016majclose$Description_2018[1],
-        flt_df_2016majclose$majority_2018[1],
-        flt_df_2016majclose$Description_2019[1],
-        flt_df_2016majclose$majority_2019[1]
-      ) %>% lapply(htmltools::HTML)
+      labels1 <- generate_ward_labels(incumbents_df1)
     }
 
     output$mymap <- renderLeaflet({
@@ -203,21 +181,17 @@ server <- function(input, output, session) {
 
     output$value <- renderText({
       HTML(paste0("<div class='result-top-box'>",
-      "Your nearest marginal is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
+      "Your nearest marginal is ",
+      as.character(flt_df_2016majclose$Ward[1]),'</div>'))
       })
 
     if (is.na(flt_df_2016majclose$Email[1])){
-      output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div class='result-bottom-box'>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
-                           "onclick=ga('send','event','click','near_link','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
-        HTML(paste(lnk))})
+      output$link1 <- renderUI({return_eventlink_html(flt_df_2016majclose)})
+      
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div class='result-bottom-box'>",
-                            "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
-                            "onclick=ga('send','event','click','near_mailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
-        HTML(paste(mailto))})
+        return_email_html(flt_df_2016majclose)
+      })
     }
     })
 
@@ -306,18 +280,7 @@ server <- function(input, output, session) {
                                      as.character(flt_df_2016majclose$Ward[1]),]
 
 
-      labels1 <- sprintf(
-        "<strong>%s</strong><br/>
-    2018 Winner - %s <br/>
-    2018 majority - %g<br/>
-    2019 Winner - %s <br/>
-    2019 majority - %g",
-        flt_df_2016majclose$Ward[1],
-        flt_df_2016majclose$Description_2018[1],
-        flt_df_2016majclose$majority_2018[1],
-        flt_df_2016majclose$Description_2019[1],
-        flt_df_2016majclose$majority_2019[1]
-      ) %>% lapply(htmltools::HTML)
+      labels1 <- generate_ward_labels(incumbents_df1)
     }
 
     output$mymap <- renderLeaflet({
@@ -335,22 +298,18 @@ server <- function(input, output, session) {
 
     output$value <- renderText({
       HTML(paste0("<div class='result-top-box'>",
-                  "Your local ward is ",as.character(flt_df_2016majclose$Ward[1]),'</div>'))
+                  "Your local ward is ",
+                  as.character(flt_df_2016majclose$Ward[1]),'</div>'))
     })
 
 
     if (is.na(flt_df_2016majclose$Email[1])){
-      output$link1 <- renderUI({
-        lnk <- HTML(paste0("<div class='result-bottom-box'>",
-                           "<a href=",as.character(flt_df_2016majclose$Link[1])," class='Linkbutton2' target='_blank'",
-                           "onclick=ga('send','event','click','mylink','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>See events in this ward</a>"))
-        HTML(paste(lnk))})
+      output$link1 <- renderUI({return_eventlink_html(flt_df_2016majclose)})
+      
     } else {
       output$link1 <- renderUI({
-        mailto <- HTML(paste0("<div class='result-bottom-box'>",
-                              "<a href='",as.character(flt_df_2016majclose$Email[1]),"?subject=I want to help Labour win!&Body=Hi,%0dI want to volunteer to help Labour win in your seat this year.%0dPlease let me know how I can get involved.%0dThanks!%0d %0d %0d This email was automatically generated because the sender used www.mynearestleedsmarginal.com' class='Linkbutton2' target='_blank'",
-                              "onclick=ga('send','event','click','mymailto','",strsplit(flt_df_2016majclose$Ward[1],' ')[[1]][1],"',1)>Email an organiser to volunteer</a>"))
-        HTML(paste(mailto))})
+       return_email_html(flt_df_2016majclose)
+        })
     }
   })
 }

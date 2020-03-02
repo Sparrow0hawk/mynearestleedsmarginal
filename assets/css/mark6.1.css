@@ -104,6 +104,8 @@ label {
   font-size: 20px;
   text-align: center;
   padding: 5px;
+  display: flex;
+  justify-content: center;
 }
 
 .result-top-box {
@@ -113,6 +115,10 @@ label {
   border-right-style: solid;
   font-size: 20px;
   text-align: center;
+}
+
+#injected_button {
+  margin: 1%;
 }
 
 #help1{
