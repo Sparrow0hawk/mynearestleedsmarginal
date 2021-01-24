@@ -34,7 +34,7 @@ COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
 COPY . /srv/shiny-server/
 
 # Make the ShinyApp available at port 80
-EXPOSE 80
+EXPOSE 3838
 
 # Copy further configuration files into the Docker image
 COPY shiny-server.sh /usr/bin/shiny-server.sh
