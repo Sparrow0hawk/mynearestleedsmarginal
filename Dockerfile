@@ -1,14 +1,10 @@
 # Install R version 3.5
-FROM r-base:3.4.4
+FROM rocker/shiny:latest
 
 # Install Ubuntu packages
-RUN apt-get update && apt-get install -y \
-    sudo \
-    gdebi-core \
-    pandoc \
-    pandoc-citeproc \
+RUN apt-get update && apt-get --no-install-recommends install -y \
     libcurl4-gnutls-dev \
-    libcairo2-dev/unstable \
+    libcairo2-dev \
     libxt-dev \
     libssl-dev \
     xtail \
@@ -16,27 +12,21 @@ RUN apt-get update && apt-get install -y \
     libgeos-dev \
     libgdal-dev
 
-# Download and install ShinyServer (latest version)
-RUN wget --no-verbose https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION -O "version.txt" && \
-    VERSION=$(cat version.txt)  && \
-    wget --no-verbose "https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$VERSION-amd64.deb" -O ss-latest.deb && \
-    gdebi -n ss-latest.deb && \
-    rm -f version.txt ss-latest.deb
 
-# Install R packages that are required
-# TODO: add further package if you need!
-RUN R -e "install.packages(c('shiny', 'here','leaflet','googleway','sp','dplyr','rgeos','rmarkdown'), repos='http://cran.rstudio.com/')"
-# installing rgdal from source
-RUN R -e "install.packages('https://cran.r-project.org/src/contrib/Archive/rgdal/rgdal_1.4-4.tar.gz', repos=NULL, type='source')"
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get clean
+
 
 # Copy configuration files into the Docker image
-COPY shiny-server.conf  /etc/shiny-server/shiny-server.conf
-COPY . /srv/shiny-server/
+COPY ./app /app
+COPY ./renv.lock ./renv.lock
+
+# install renv & restore packages
+RUN Rscript -e 'install.packages("renv")'
+RUN Rscript -e 'renv::restore()'
 
 # Make the ShinyApp available at port 80
 EXPOSE 3838
 
-# Copy further configuration files into the Docker image
-COPY shiny-server.sh /usr/bin/shiny-server.sh
-
-CMD ["/usr/bin/shiny-server.sh"]
+CMD ["R", "-e", "shiny::runApp('/app', host = '0.0.0.0', port = 3838)"]

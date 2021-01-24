@@ -3,7 +3,4 @@
 .Rhistory
 .RData
 .Ruserdata
-emails2019.csv
-packrat/lib*/
-packrat/src/*
-assets/data/*
+app/assets/data/*
