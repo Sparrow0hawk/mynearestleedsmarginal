@@ -2,9 +2,11 @@
 
 library(testthat)
 library(here)
+library(sp)
+library(rgeos)
 
 # load testing dataframe
-load(here("src","data","testdata1.RData"), envir=.GlobalEnv)
+load(here("app","assets","data","testdata1.RData"), envir=.GlobalEnv)
 
 test_that('testing geocode returns expected lng', {
   library(googleway)
@@ -23,7 +25,7 @@ test_that('testing geocode returns expected lat', {
   
 })
 
-test_that(' test the spatial narrowing of ward dataframe', {
+test_that(' test the spatial narrowing of ward dataframe HR', {
   points_a <- cbind(lon = -1.553, lat = 53.796)
   
   points_sp <- SpatialPoints(points_a)
@@ -78,7 +80,7 @@ test_that(' test the spatial narrowing of ward dataframe', {
 })
 
 
-test_that(' test the spatial narrowing of ward dataframe', {
+test_that(' test the spatial narrowing of ward dataframe FW', {
   points_a <- cbind(lon = -1.623, lat = 53.814)
   
   points_sp <- SpatialPoints(points_a)
@@ -132,7 +134,7 @@ test_that(' test the spatial narrowing of ward dataframe', {
   expect_equal(wardname, 'Farnley and Wortley')
 })
 
-test_that(' test the spatial narrowing of ward dataframe', {
+test_that(' test the spatial narrowing of ward dataframe WW', {
   points_a <- cbind(lon = -1.568, lat = 53.834)
   
   points_sp <- SpatialPoints(points_a)
