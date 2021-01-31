@@ -161,8 +161,8 @@ server <- function(input, output, session) {
       df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
                                     as.character(flt_df_2016majclose$Ward[1]),]
 
-
-      labels1 <- generate_ward_labels(incumbents_df1)
+      # generate labels using the 1st row of the filtered dataframe
+      labels1 <- generate_ward_labels(flt_df_2016majclose[1,])
     }
 
     output$mymap <- renderLeaflet({

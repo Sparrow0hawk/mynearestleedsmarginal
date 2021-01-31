@@ -1,0 +1,8 @@
+name: leedsmargR
+channels:
+  - conda-forge
+dependencies:
+  - r-base=4.0.3
+  - geos=3.8.1
+  - gdal=3.2.1
+  - pkg-config
