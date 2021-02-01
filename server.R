@@ -1,5 +1,4 @@
 # server.R for mynearestleedsmarginal.com
-source(here('R','utils.R'))
 library(shiny)
 library(here)
 library(leaflet)
@@ -9,14 +8,14 @@ library(sp)
 library(dplyr)
 library(rgeos)
 library(rgdal)
-
+source(here('R','utils.R'))
 options(shiny.sanitize.errors = TRUE)
 
 # load all preparaed data
 # gives magic number error
 #load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
 
-shape_leeds <- readOGR(here("assets","data","leedswards2018.geojson"))
+shape_leeds <- readOGR(here("assets","data","2021_leeds_df.geojson"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
@@ -24,11 +23,6 @@ lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
                  row.names = 'X',
                  stringsAsFactors = FALSE)[[1]]
-
-# load 2020 main data
-incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'),
-                           row.names = 'X',
-                           stringsAsFactors = FALSE)
 
 # load key seats list
 if( file.exists(here("assets","data","keyseatlist.csv"))) {
