@@ -57,7 +57,7 @@ generate_ward_labels <- function(dataframe) {
     2018 majority - %g<br/>
     2019 Winner - %s <br/>
     2019 majority - %g",
-    dataframe$Ward,
+    dataframe$WARD_NAME,
     dataframe$Description_2018,
     dataframe$majority_2018,
     dataframe$Description_2019,

@@ -61,19 +61,18 @@ polpartycol <- c('blue','black','green','red','orange','purple')
 names(emailstbl) <- c("Ward","Email")
 
 # join emails to main dataframe
-incumbents_df1 <- left_join(incumbents_df1, emailstbl, by = "Ward")
+shape_leeds <-  merge(shape_leeds, emailstbl, 
+                         by.x = 'WARD_NAME', 
+                         by.y = 'Ward')
 
-# order main dataframe by maps data
-incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward,
-                                             shape_leeds$WARD_NAME)),]
 
 
 server <- function(input, output, session) {
 
   pal <- colorFactor(palette = polpartycol,
-                     levels(as.factor(incumbents_df1$Description_2018)))
+                     levels(as.factor(shape_leeds$Description_2018)))
 
-  labels <- generate_ward_labels(incumbents_df1)
+  labels <- generate_ward_labels(shape_leeds)
 
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
@@ -92,7 +91,7 @@ server <- function(input, output, session) {
       addPolygons(data = shape_leeds,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = ~pal(incumbents_df1$Description_2018),
+                  fillColor = ~pal(shape_leeds$Description_2018),
                   fillOpacity=0.3,
                   dashArray = 5,
                   weight = 2,
@@ -110,18 +109,11 @@ server <- function(input, output, session) {
 
       points_df <- data.frame(apply(gDistance(points_sp, shape_leeds, byid = TRUE),1,min))
 
-      incumbents_df1 <- cbind(incumbents_df1,points_df)
+      shape_leeds <- cbind(shape_leeds,points_df)
 
-      names(incumbents_df1) <- c("Description_2018",   #1
-                                 "Ward",  #2
-                                 "majority_2018", #3
-                                 "Fullname", #4
-                                 "majority_2019", #5
-                                 "Description_2019", #6
-                                 "Constituency", #7
-                                 "Link",  #8
-                                 "Email", #9
-                                 "Distance from points")  #10
+      # rename the last column with distances 
+      # this creates a warning i'd like to resolve
+      names(shape_leeds)[length(names(shape_leeds))] <- c("Distance from points")
 
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
