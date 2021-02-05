@@ -109,55 +109,47 @@ server <- function(input, output, session) {
 
       points_df <- data.frame(apply(gDistance(points_sp, shape_leeds, byid = TRUE),1,min))
 
-      shape_leeds <- cbind(shape_leeds,points_df)
+      target_ward <- cbind(shape_leeds,points_df)
 
       # rename the last column with distances 
       # this creates a warning i'd like to resolve
-      names(shape_leeds)[length(names(shape_leeds))] <- c("Distance from points")
+      names(target_ward)[length(names(target_ward))] <- c("Distance.from.points")
 
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
-      if (0 %in% incumbents_df1[,"Distance from points"]){
-        my_const <- filter(incumbents_df1,incumbents_df1[,"Distance from points"]==0)
+      if (0 %in% target_ward$Distance.from.points){
+        my_const <- target_ward[target_ward$Distance.from.points == 0,]$Constituency
 
-        # creates a variable of inputted constituency
-        my_const <- my_const$Constituency
-      }else
+      }else {
         my_const <- "Other"
+      }
       # END OF NEW SECTION
-
-      df_2016majclose <- incumbents_df1
 
       # filter list for only key seat list
       # REMOVED FOR 2019 pending recommendations
-      df_2016majclose <- df_2016majclose %>%
-        filter(Ward %in% keyseats)
+      target_ward <- target_ward[target_ward$WARD_NAME %in% keyseats,]
 
       # checks whether inputted postcode constituency is present in
       # key seats list, to ensure within constituency filter
-      if(my_const %in% df_2016majclose$Constituency){
-        df_2016majclose <- df_2016majclose %>%
-          filter(Constituency %in% my_const)
+      if(my_const %in% target_ward$Constituency){
+        target_ward <- target_ward[target_ward$Constituency %in% my_const,]
       }
 
       # arranges by distance (nearest first) key seats list
-      flt_df_2016majclose <- arrange(df_2016majclose,
-                                     df_2016majclose[,"Distance from points"])
-
-      df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
-                                    as.character(flt_df_2016majclose$Ward[1]),]
+      # take the top item
+      target_ward <- target_ward[order(target_ward@data$Distance.from.points) == 1,]
 
       # generate labels using the 1st row of the filtered dataframe
-      labels1 <- generate_ward_labels(flt_df_2016majclose[1,])
+      labels1 <- generate_ward_labels(target_ward)
     }
 
     output$mymap <- renderLeaflet({
       leaflet() %>%
         addTiles() %>%
-        addPolygons(data = df_2016majmap,
+        addPolygons(data = target_ward,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Description_2018[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
+                    fillColor = ~pal(target_ward$Description_2018),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
@@ -168,15 +160,15 @@ server <- function(input, output, session) {
     output$value <- renderText({
       HTML(paste0("<div class='result-top-box'>",
       "Your nearest marginal is ",
-      as.character(flt_df_2016majclose$Ward[1]),'</div>'))
+      as.character(target_ward$WARD_NAME[1]),'</div>'))
       })
 
-    if (is.na(flt_df_2016majclose$Email[1])){
-      output$link1 <- renderUI({return_eventlink_html(flt_df_2016majclose)})
+    if (is.na(target_ward$Email[1])){
+      output$link1 <- renderUI({return_eventlink_html(target_ward)})
       
     } else {
       output$link1 <- renderUI({
-        return_email_html(flt_df_2016majclose)
+        return_email_html(target_ward)
       })
     }
     })
@@ -191,7 +183,7 @@ server <- function(input, output, session) {
         addPolygons(data = shape_leeds,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(incumbents_df1$Description_2018),
+                    fillColor = ~pal(shape_leeds$Description_2018),
                     fillOpacity=0.3,
                     dashArray = 5,
                     weight = 2,
@@ -206,6 +198,7 @@ server <- function(input, output, session) {
 
   })
 
+  # my ward button
   points2 <- eventReactive(input$my_ward, {
     if (input$postcode == ""){
       a2 <- google_geocode(as.character(lst[sample(c(1,2,3), size=1),]), key = key1)
