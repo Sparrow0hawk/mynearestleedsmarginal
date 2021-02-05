@@ -11,7 +11,7 @@ return_email_html <- function(filtered_dataframe) {
                         as.character(filtered_dataframe$Link[1]),
                         " class='Linkbutton2' target='_blank'",
                         "onclick=ga('send','event','click','mylink','",
-                        strsplit(filtered_dataframe$Ward[1],' ')[[1]][1],
+                        strsplit(filtered_dataframe$WARD_NAME[1],' ')[[1]][1],
                         "',1)>See events in this ward</a>",
                         "</div>",
                         # email button
@@ -28,7 +28,7 @@ return_email_html <- function(filtered_dataframe) {
                         width = 1000),
                         "class='Linkbutton2' target='_blank'",
                         "onclick=ga('send','event','click','near_mailto','",
-                        strsplit(filtered_dataframe$Ward[1],' ')[[1]][1],
+                        strsplit(filtered_dataframe$WARD_NAME[1],' ')[[1]][1],
                         "',1)>Email an organiser to volunteer</a>",
                         "</div>"))
   
@@ -43,7 +43,7 @@ return_eventlink_html <- function(filtered_dataframe) {
                      as.character(filtered_dataframe$Link[1]),
                      " class='Linkbutton2' target='_blank'",
                      "onclick=ga('send','event','click','mylink','",
-                     strsplit(filtered_dataframe$Ward[1],' ')[[1]][1],
+                     strsplit(filtered_dataframe$WARD_NAME[1],' ')[[1]][1],
                      "',1)>See events in this ward</a>"))
   
   return(HTML(paste(lnk)))
