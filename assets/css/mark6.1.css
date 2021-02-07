@@ -1,7 +1,4 @@
 /* -- attempt to first write CSS template for Leeds Nearest marginal app */
-
-<!DOCTYPE CSS>
-
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -24,7 +21,6 @@
 *{ font-family: Open Sans;
 }
 
-<style>
 .mex {
   text-align: center;
   font-size: 20px;
@@ -126,5 +122,3 @@ label {
   text-align: center;
   font-family: open sans;
 }
-
-</style>
