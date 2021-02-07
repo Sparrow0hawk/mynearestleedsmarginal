@@ -19,6 +19,12 @@ shape_leeds <- readOGR(here("assets","data","2021_leeds_df.geojson"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
+dialogue.link <- "https://dialogue.labour.org.uk/campaign/1?ons_code="
+
+shape_leeds <- cbind(shape_leeds, paste0(dialogue.link, shape_leeds$WARD_CODE))
+
+names(shape_leeds)[length(names(shape_leeds))] <- c("Dialogue.link")
+
 # load googleways key file
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
                  row.names = 'X',
@@ -164,11 +170,20 @@ server <- function(input, output, session) {
       })
 
     if (is.na(target_ward$Email[1])){
-      output$link1 <- renderUI({return_eventlink_html(target_ward)})
+      output$link1 <- renderUI({return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(target_ward)),
+        return_injectedButton(return_dialoguelink_html(target_ward))
+      )
+      })
       
     } else {
       output$link1 <- renderUI({
-        return_email_html(target_ward)
+        return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(target_ward)),
+        return_injectedButton(return_email_html(target_ward)),
+        return_injectedButton(return_dialoguelink_html(target_ward))
+        )
+      )
       })
     }
     })
@@ -249,12 +264,21 @@ server <- function(input, output, session) {
 
 
     if (is.na(home.ward$Email[1])){
-      output$link1 <- renderUI({return_eventlink_html(home.ward)})
+      output$link1 <- renderUI({return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(home.ward)),
+        return_injectedButton(return_dialoguelink_html(home.ward))
+      )
+      })
       
     } else {
       output$link1 <- renderUI({
-       return_email_html(home.ward)
-        })
+        return_results_box(paste0(
+          return_injectedButton(return_eventlink_html(home.ward)),
+          return_injectedButton(return_email_html(home.ward)),
+          return_injectedButton(return_dialoguelink_html(home.ward))
+        )
+        )
+      })
     }
   })
 }

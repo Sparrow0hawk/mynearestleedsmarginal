@@ -102,6 +102,7 @@ label {
   padding: 5px;
   display: flex;
   justify-content: center;
+  flex-wrap:wrap;
 }
 
 .result-top-box {
