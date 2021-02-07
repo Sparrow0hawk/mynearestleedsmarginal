@@ -34,7 +34,7 @@ ui <- fluidPage(
   # UI title panel
   tags$div(class='row',
            tags$div(class='banner-title',
-           titlePanel("My Nearest Leeds 2020 Marginal")
+           titlePanel("My Nearest Leeds Marginal")
            )
   ),
   # creates a side bar for postcode, button and slider
@@ -42,7 +42,7 @@ ui <- fluidPage(
 
     sidebarPanel(
 
-      tags$p("Welcome to my nearest marginal ward for Leeds 2020 council elections!"),
+      tags$p("Welcome to my nearest marginal ward for Leeds 2021 council elections!"),
       tags$p("We need your help to keep Leeds a Labour Council this year."),
       tags$p("Enter your postcode below and press search to
             find your nearest marginal."),
@@ -63,7 +63,7 @@ ui <- fluidPage(
       tags$br(),
       tags$br(),
 
-      tags$strong("Don't forget polling day is Thursday 7th May!")
+      tags$strong("Don't forget polling day is Thursday 6th May!")
       ,tags$p(" ")
       ,tags$p('#keepLeedsLabour', class = 'Linkbutton')
       ,tags$p(' ')
@@ -87,12 +87,12 @@ ui <- fluidPage(
                      'Register to vote'),
               '   ',
               tags$a(class = 'Linkbutton2',
-                     href='https://www.leeds.gov.uk/docs/Application%20to%20Vote%20by%20Post.pdf',
+                     href='https://postalvote.labour.org.uk/',
                      'Get a postal vote')
               )
       ,tags$br(),
       tags$p(id = "help1", "Made by Alex Coleman ~ Found an error?",
-             tags$a(id = "help1",href="mailto:alexcoleman@hunsletandriversidelabour.org.uk", "Email Me.")),
+             tags$a(id = "help1",href="mailto:campaigns@leedscentralclp.com", "Email Me.")),
       tags$p(id = "help1", "If the page becomes unresponsive try refreshing your browser."),
       tags$p(id = "help1", "This page was made using Shiny.")
 
