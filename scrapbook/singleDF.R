@@ -2,12 +2,15 @@
 
 library(sp)
 
+incumbents_df1 <- read.csv("assets/data/mainfile_2020.csv", row.names = 1)
 
-testBind <- cbind(shape_leeds, incumbents_df1)
+new_leeds_shp <- readOGR("assets/data/2021_leedswards.geojson")
+
+names(new_leeds_shp)
 
 # merging using sp
 
-test_dat <- merge(shape_leeds, incumbents_df1, 
+test_dat <- merge(new_leeds_shp, incumbents_df1, 
       by.x = 'WARD_NAME', 
       by.y = 'Ward')
 
