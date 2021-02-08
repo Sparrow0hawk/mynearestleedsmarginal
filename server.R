@@ -15,13 +15,13 @@ options(shiny.sanitize.errors = TRUE)
 # gives magic number error
 #load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
 
-shape_leeds <- readOGR(here("assets","data","2021_leeds_df.geojson"))
+shape_leeds <- readOGR(here("assets","data","2021_leeds_df1.geojson"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
 dialogue.link <- "https://dialogue.labour.org.uk/campaign/1?ons_code="
 
-shape_leeds <- cbind(shape_leeds, paste0(dialogue.link, shape_leeds$WARD_CODE))
+shape_leeds <- cbind(shape_leeds, paste0(dialogue.link, shape_leeds$WD20CD))
 
 names(shape_leeds)[length(names(shape_leeds))] <- c("Dialogue.link")
 
@@ -173,7 +173,7 @@ server <- function(input, output, session) {
       output$link1 <- renderUI({return_results_box(paste0(
         return_injectedButton(return_eventlink_html(target_ward)),
         return_injectedButton(return_dialoguelink_html(target_ward))
-      )
+      ))
       })
       
     } else {
@@ -267,7 +267,7 @@ server <- function(input, output, session) {
       output$link1 <- renderUI({return_results_box(paste0(
         return_injectedButton(return_eventlink_html(home.ward)),
         return_injectedButton(return_dialoguelink_html(home.ward))
-      )
+      ))
       })
       
     } else {
