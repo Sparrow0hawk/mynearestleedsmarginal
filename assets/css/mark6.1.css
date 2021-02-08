@@ -92,6 +92,10 @@ label {
   background-color: grey;
 }
 
+.Linkbutton2:visited {
+  color: white;
+}
+
 .result-bottom-box {
   border-color: rgb(230, 0, 71);
   border-bottom-style: solid;
