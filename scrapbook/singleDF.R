@@ -1,6 +1,9 @@
 # experiments creating a single map dataframe object
-
+library(here)
 library(sp)
+library(rgdal)
+library(leaflet)
+source("R/utils.R")
 
 incumbents_df1 <- read.csv("assets/data/mainfile_2020.csv", row.names = 1)
 
@@ -13,6 +16,8 @@ names(new_leeds_shp)
 test_dat <- merge(new_leeds_shp, incumbents_df1, 
       by.x = 'WARD_NAME', 
       by.y = 'Ward')
+
+polpartycol <- c('blue','black','green','red','orange','purple')
 
 pal <- colorFactor(palette = polpartycol,
                    levels(as.factor(incumbents_df1$Description_2018)))
@@ -33,17 +38,12 @@ leaflet() %>%
               group = "Wards",
               label = labels)
 
-### creating a single geojson object with all data
 
-shape_leeds <- readOGR(here("assets","data","leedswards2018.geojson"))
-
-# load 2020 main data
-incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'),
-                           row.names = 'X',
-                           stringsAsFactors = FALSE)
-
-full_spatial_df <- merge(shape_leeds, incumbents_df1, 
+full_spatial_df <- merge(new_leeds_shp, incumbents_df1, 
                   by.x = 'WARD_NAME', 
                   by.y = 'Ward')
 
-writeOGR(full_spatial_df, "assets/data/2021_leeds_df.geojson", layer="meuse", driver="GeoJSON")
+writeOGR(full_spatial_df, 
+         "assets/data/2021_leeds_df1.geojson", 
+         layer="meuse", 
+         driver="GeoJSON")
