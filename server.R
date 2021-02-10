@@ -143,7 +143,7 @@ server <- function(input, output, session) {
 
       # arranges by distance (nearest first) key seats list
       # take the top item
-      target_ward <- target_ward[order(target_ward@data$Distance.from.points) == 1,]
+      target_ward <- target_ward[rank(target_ward@data$Distance.from.points) == 1,]
 
       # generate labels using the 1st row of the filtered dataframe
       labels1 <- generate_ward_labels(target_ward)
