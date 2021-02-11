@@ -1,5 +1,4 @@
 # server.R for mynearestleedsmarginal.com
-source(here('R','utils.R'))
 library(shiny)
 library(here)
 library(leaflet)
@@ -9,26 +8,26 @@ library(sp)
 library(dplyr)
 library(rgeos)
 library(rgdal)
-
+source(here('R','utils.R'))
 options(shiny.sanitize.errors = TRUE)
 
-# load all preparaed data
-# gives magic number error
-#load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
+# load all prepared data
 
-shape_leeds <- readOGR(here("assets","data","leedswards2018.geojson"))
+# load rdata saved in convert2RDS.R
+shape_leeds <- readRDS(here("assets","data","2021geojson.Rdata"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
+
+dialogue.link <- "https://dialogue.labour.org.uk/campaign/1?ons_code="
+
+shape_leeds <- cbind(shape_leeds, paste0(dialogue.link, shape_leeds$WD20CD))
+
+names(shape_leeds)[length(names(shape_leeds))] <- c("Dialogue.link")
 
 # load googleways key file
 key1 <- read.csv(here("assets","data","googleways_key.txt"),
                  row.names = 'X',
                  stringsAsFactors = FALSE)[[1]]
-
-# load 2020 main data
-incumbents_df1 <- read.csv(here('assets','data','mainfile_2020.csv'),
-                           row.names = 'X',
-                           stringsAsFactors = FALSE)
 
 # load key seats list
 if( file.exists(here("assets","data","keyseatlist.csv"))) {
@@ -67,19 +66,18 @@ polpartycol <- c('blue','black','green','red','orange','purple')
 names(emailstbl) <- c("Ward","Email")
 
 # join emails to main dataframe
-incumbents_df1 <- left_join(incumbents_df1, emailstbl, by = "Ward")
+shape_leeds <-  merge(shape_leeds, emailstbl, 
+                         by.x = 'WARD_NAME', 
+                         by.y = 'Ward')
 
-# order main dataframe by maps data
-incumbents_df1 <- incumbents_df1[order(match(incumbents_df1$Ward,
-                                             shape_leeds$WARD_NAME)),]
 
 
 server <- function(input, output, session) {
 
   pal <- colorFactor(palette = polpartycol,
-                     levels(as.factor(incumbents_df1$Description_2018)))
+                     levels(as.factor(shape_leeds$Description_2018)))
 
-  labels <- generate_ward_labels(incumbents_df1)
+  labels <- generate_ward_labels(shape_leeds)
 
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
@@ -98,7 +96,7 @@ server <- function(input, output, session) {
       addPolygons(data = shape_leeds,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = ~pal(incumbents_df1$Description_2018),
+                  fillColor = ~pal(shape_leeds$Description_2018),
                   fillOpacity=0.3,
                   dashArray = 5,
                   weight = 2,
@@ -116,62 +114,47 @@ server <- function(input, output, session) {
 
       points_df <- data.frame(apply(gDistance(points_sp, shape_leeds, byid = TRUE),1,min))
 
-      incumbents_df1 <- cbind(incumbents_df1,points_df)
+      target_ward <- cbind(shape_leeds,points_df)
 
-      names(incumbents_df1) <- c("Description_2018",   #1
-                                 "Ward",  #2
-                                 "majority_2018", #3
-                                 "Fullname", #4
-                                 "majority_2019", #5
-                                 "Description_2019", #6
-                                 "Constituency", #7
-                                 "Link",  #8
-                                 "Email", #9
-                                 "Distance from points")  #10
+      # rename the last column with distances 
+      # this creates a warning i'd like to resolve
+      names(target_ward)[length(names(target_ward))] <- c("Distance.from.points")
 
       # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
       # pulls out the constituency of postcode entered
-      if (0 %in% incumbents_df1[,"Distance from points"]){
-        my_const <- filter(incumbents_df1,incumbents_df1[,"Distance from points"]==0)
+      if (0 %in% target_ward$Distance.from.points){
+        my_const <- target_ward[target_ward$Distance.from.points == 0,]$Constituency
 
-        # creates a variable of inputted constituency
-        my_const <- my_const$Constituency
-      }else
+      }else {
         my_const <- "Other"
+      }
       # END OF NEW SECTION
-
-      df_2016majclose <- incumbents_df1
 
       # filter list for only key seat list
       # REMOVED FOR 2019 pending recommendations
-      df_2016majclose <- df_2016majclose %>%
-        filter(Ward %in% keyseats)
+      target_ward <- target_ward[target_ward$WARD_NAME %in% keyseats,]
 
       # checks whether inputted postcode constituency is present in
       # key seats list, to ensure within constituency filter
-      if(my_const %in% df_2016majclose$Constituency){
-        df_2016majclose <- df_2016majclose %>%
-          filter(Constituency %in% my_const)
+      if(my_const %in% target_ward$Constituency){
+        target_ward <- target_ward[target_ward$Constituency %in% my_const,]
       }
 
       # arranges by distance (nearest first) key seats list
-      flt_df_2016majclose <- arrange(df_2016majclose,
-                                     df_2016majclose[,"Distance from points"])
-
-      df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
-                                    as.character(flt_df_2016majclose$Ward[1]),]
+      # take the top item
+      target_ward <- target_ward[rank(target_ward@data$Distance.from.points) == 1,]
 
       # generate labels using the 1st row of the filtered dataframe
-      labels1 <- generate_ward_labels(flt_df_2016majclose[1,])
+      labels1 <- generate_ward_labels(target_ward)
     }
 
     output$mymap <- renderLeaflet({
       leaflet() %>%
         addTiles() %>%
-        addPolygons(data = df_2016majmap,
+        addPolygons(data = target_ward,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Description_2018[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
+                    fillColor = ~pal(target_ward$Description_2018),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
@@ -182,15 +165,24 @@ server <- function(input, output, session) {
     output$value <- renderText({
       HTML(paste0("<div class='result-top-box'>",
       "Your nearest marginal is ",
-      as.character(flt_df_2016majclose$Ward[1]),'</div>'))
+      as.character(target_ward$WARD_NAME[1]),'</div>'))
       })
 
-    if (is.na(flt_df_2016majclose$Email[1])){
-      output$link1 <- renderUI({return_eventlink_html(flt_df_2016majclose)})
+    if (is.na(target_ward$Email[1])){
+      output$link1 <- renderUI({return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(target_ward)),
+        return_injectedButton(return_dialoguelink_html(target_ward))
+      ))
+      })
       
     } else {
       output$link1 <- renderUI({
-        return_email_html(flt_df_2016majclose)
+        return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(target_ward)),
+        return_injectedButton(return_email_html(target_ward)),
+        return_injectedButton(return_dialoguelink_html(target_ward))
+        )
+      )
       })
     }
     })
@@ -205,7 +197,7 @@ server <- function(input, output, session) {
         addPolygons(data = shape_leeds,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(incumbents_df1$Description_2018),
+                    fillColor = ~pal(shape_leeds$Description_2018),
                     fillOpacity=0.3,
                     dashArray = 5,
                     weight = 2,
@@ -220,6 +212,7 @@ server <- function(input, output, session) {
 
   })
 
+  # my ward button
   points2 <- eventReactive(input$my_ward, {
     if (input$postcode == ""){
       a2 <- google_geocode(as.character(lst[sample(c(1,2,3), size=1),]), key = key1)
@@ -239,57 +232,23 @@ server <- function(input, output, session) {
 
       points_df2 <- data.frame(apply(gDistance(points_sp2, shape_leeds, byid = TRUE),1,min))
 
-      incumbents_df1 <- cbind(incumbents_df1,points_df2)
-
-      names(incumbents_df1) <- c("Description_2018",   #1
-                                 "Ward",  #2
-                                 "majority_2018", #3
-                                 "Fullname", #4
-                                 "majority_2019", #5
-                                 "Description_2019", #6
-                                 "Constituency", #7
-                                 "Link",  #8
-                                 "Email", #9
-                                 "Distance from points")  #10
-
-      # NEW SECTION RESOLVING PLOTTING CRASH FOR POSTCODES OUTSIDE OF LEEDS
-      # pulls out the constituency of postcode entered
-      if (0 %in% incumbents_df1[,"Distance from points"]){
-        my_const <- filter(incumbents_df1,incumbents_df1[,"Distance from points"]==0)
-
-        # creates a variable of inputted constituency
-        my_const <- my_const$Constituency
-      }else
-        my_const <- "Other"
-      # END OF NEW SECTION
-
-      df_2016majclose <- incumbents_df1
-
-      # checks whether inputted postcode constituency is present in
-      # key seats list, to ensure within constituency filter
-      if(my_const %in% df_2016majclose$Constituency){
-        df_2016majclose <- df_2016majclose %>%
-          filter(Constituency %in% my_const)
-      }
-
-      # arranges by distance (nearest first) key seats list
-      flt_df_2016majclose <- arrange(df_2016majclose,
-                                     df_2016majclose[,"Distance from points"])
-
-      df_2016majmap <- shape_leeds[as.character(shape_leeds$WARD_NAME) %in%
-                                     as.character(flt_df_2016majclose$Ward[1]),]
-
-
-      labels1 <- generate_ward_labels(incumbents_df1)
+      # create home.ward variable with distances column
+      home.ward <- cbind(shape_leeds,points_df2)
+      # set the column name of distances to Distance.from.points
+      names(home.ward)[length(names(home.ward))] <- c("Distance.from.points")
+      # set home.ward variable to the item where Distance is 0
+      home.ward <- home.ward[home.ward@data$Distance.from.points == 0,]
+      # generate labels for map
+      labels1 <- generate_ward_labels(home.ward)
     }
 
     output$mymap <- renderLeaflet({
       leaflet() %>%
         addTiles() %>%
-        addPolygons(data = df_2016majmap,
+        addPolygons(data = home.ward,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(df_2016majclose$Description_2018[df_2016majclose$Ward %in% df_2016majmap$WARD_NAME]),
+                    fillColor = ~pal(home.ward$Description_2018),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
@@ -299,17 +258,26 @@ server <- function(input, output, session) {
     output$value <- renderText({
       HTML(paste0("<div class='result-top-box'>",
                   "Your local ward is ",
-                  as.character(flt_df_2016majclose$Ward[1]),'</div>'))
+                  as.character(home.ward$WARD_NAME[1]),'</div>'))
     })
 
 
-    if (is.na(flt_df_2016majclose$Email[1])){
-      output$link1 <- renderUI({return_eventlink_html(flt_df_2016majclose)})
+    if (is.na(home.ward$Email[1])){
+      output$link1 <- renderUI({return_results_box(paste0(
+        return_injectedButton(return_eventlink_html(home.ward)),
+        return_injectedButton(return_dialoguelink_html(home.ward))
+      ))
+      })
       
     } else {
       output$link1 <- renderUI({
-       return_email_html(flt_df_2016majclose)
-        })
+        return_results_box(paste0(
+          return_injectedButton(return_eventlink_html(home.ward)),
+          return_injectedButton(return_email_html(home.ward)),
+          return_injectedButton(return_dialoguelink_html(home.ward))
+        )
+        )
+      })
     }
   })
 }

@@ -3,4 +3,10 @@
 .Rhistory
 .RData
 .Ruserdata
-app/assets/data/*
+.vscode
+
+# data files
+data-archive.tar.gz
+emails2020.csv
+googleways_key.txt
+keyseatlist.csv

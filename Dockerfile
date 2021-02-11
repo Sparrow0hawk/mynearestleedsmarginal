@@ -19,7 +19,7 @@ RUN apt-get update && \
 
 
 # Copy configuration files into the Docker image
-COPY ./app /app
+COPY . /app
 COPY ./renv.lock ./renv.lock
 
 # install renv & restore packages

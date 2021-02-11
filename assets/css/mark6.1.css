@@ -1,7 +1,4 @@
 /* -- attempt to first write CSS template for Leeds Nearest marginal app */
-
-<!DOCTYPE CSS>
-
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
@@ -24,7 +21,6 @@
 *{ font-family: Open Sans;
 }
 
-<style>
 .mex {
   text-align: center;
   font-size: 20px;
@@ -96,6 +92,10 @@ label {
   background-color: grey;
 }
 
+.Linkbutton2:visited {
+  color: white;
+}
+
 .result-bottom-box {
   border-color: rgb(230, 0, 71);
   border-bottom-style: solid;
@@ -106,6 +106,7 @@ label {
   padding: 5px;
   display: flex;
   justify-content: center;
+  flex-wrap:wrap;
 }
 
 .result-top-box {
@@ -126,5 +127,3 @@ label {
   text-align: center;
   font-family: open sans;
 }
-
-</style>
