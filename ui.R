@@ -6,7 +6,7 @@ library(here)
 card_meta <- list(
   t_ilte = 'mynearestleedsmarginal.com',
   u_rl = 'https://www.mynearestleedsmarginal.com/',
-  img = 'https://mynearestleedsmarginal.com/img/mynearestleedsmarg.png',
+  img = 'https://raw.githubusercontent.com/Sparrow0hawk/mynearestleedsmarginal2019/main/assets/img/mynearestleedsmarg.png',
   descrip_tion = 'Find your nearest marginal council seat and help campaign!'
 )
 
