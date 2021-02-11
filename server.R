@@ -11,11 +11,10 @@ library(rgdal)
 source(here('R','utils.R'))
 options(shiny.sanitize.errors = TRUE)
 
-# load all preparaed data
-# gives magic number error
-#load(here("assets","data","geodata.Rdata"), envir=.GlobalEnv)
+# load all prepared data
 
-shape_leeds <- readOGR(here("assets","data","2021_leeds_df1.geojson"))
+# load rdata saved in convert2RDS.R
+shape_leeds <- readRDS(here("assets","data","2021geojson.Rdata"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
