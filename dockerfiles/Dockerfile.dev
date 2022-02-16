@@ -25,7 +25,5 @@ COPY ./renv.lock ./renv.lock
 USER ruser
 
 # install renv & restore packages
-RUN Rscript -e 'install.packages("renv")'
-RUN Rscript -e 'renv::restore()'
 
 CMD tail -f /dev/null
