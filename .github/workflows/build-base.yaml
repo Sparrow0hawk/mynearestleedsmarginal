@@ -14,7 +14,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: mynearestleedsmarg-base
+  IMAGE_NAME: ${{ github.repository }}base
 jobs:
   build-and-push-image:
     runs-on: ubuntu-latest
