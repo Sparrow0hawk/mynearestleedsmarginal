@@ -6,7 +6,10 @@
 .vscode
 
 # data files
-data-archive.tar.gz
+*.tar.gz
 emails2020.csv
 googleways_key.txt
 keyseatlist.csv
+
+# mac files
+.DS_Store
