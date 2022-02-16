@@ -7,10 +7,8 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branch: 
-      - docker-base
-    #paths: 
-    #  - "dockerfiles/Dockerfile.base"
+    paths: 
+     - "dockerfiles/Dockerfile.base"
 
 env:
   REGISTRY: ghcr.io
