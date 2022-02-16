@@ -7,7 +7,6 @@ library(sp)
 # not needed loading data
 library(dplyr)
 library(rgeos)
-library(rgdal)
 source(here('R','utils.R'))
 options(shiny.sanitize.errors = TRUE)
 
