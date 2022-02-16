@@ -1,5 +1,5 @@
 # Install R version 3.5
-FROM mynearestleedsbase:latest
+FROM ghcr.io/sparrow0hawk/mynearestleedsmarginalbase:docker-base
 
 COPY ../ /app
 
