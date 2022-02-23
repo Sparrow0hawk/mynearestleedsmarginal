@@ -3,6 +3,6 @@ channels:
   - conda-forge
 dependencies:
   - r-base=4.0.3
-  - geos=3.8.1
-  - gdal=3.2.1
+  - geos=3.9.1
+  - gdal=3.2.2
   - pkg-config
