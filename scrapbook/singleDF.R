@@ -1,49 +1,33 @@
-# experiments creating a single map dataframe object
+#!/usr/bin/env Rscript
+
+# create geojson object with data as features
+
 library(here)
 library(sp)
 library(rgdal)
 library(leaflet)
 source("R/utils.R")
 
-incumbents_df1 <- read.csv("assets/data/mainfile_2020.csv", row.names = 1)
+main <- function(majority_file, output_name) {
 
-new_leeds_shp <- readOGR("assets/data/2021_leedswards.geojson")
+      incumbents_df1 <- read.csv(majority_file, row.names = 1)
 
-names(new_leeds_shp)
+      new_leeds_shp <- readOGR(here("assets","data","leeds_wards_2018.geojson"))
 
-# merging using sp
+      full_spatial_df <- merge(new_leeds_shp, incumbents_df1, 
+                        by.x = 'WARD_NAME', 
+                        by.y = 'Ward')
 
-test_dat <- merge(new_leeds_shp, incumbents_df1, 
-      by.x = 'WARD_NAME', 
-      by.y = 'Ward')
+      writeOGR(full_spatial_df, 
+            paste0("assets/data/",output_name), 
+            layer="meuse", 
+            driver="GeoJSON")
+}
 
-polpartycol <- c('blue','black','green','red','orange','purple')
+args <- commandArgs(trailingOnly = TRUE)
 
-pal <- colorFactor(palette = polpartycol,
-                   levels(as.factor(incumbents_df1$Description_2018)))
-
-labels <- generate_ward_labels(test_dat)
-
-labels
-
-leaflet() %>%
-  addTiles() %>%
-  addPolygons(data = test_dat,
-              stroke = TRUE,
-              color = "black",
-              fillColor = ~pal(test_dat$Description_2018),
-              fillOpacity=0.3,
-              dashArray = 5,
-              weight = 2,
-              group = "Wards",
-              label = labels)
-
-
-full_spatial_df <- merge(new_leeds_shp, incumbents_df1, 
-                  by.x = 'WARD_NAME', 
-                  by.y = 'Ward')
-
-writeOGR(full_spatial_df, 
-         "assets/data/2021_leeds_df1.geojson", 
-         layer="meuse", 
-         driver="GeoJSON")
+if(length(args) < 2){
+  stop("Must provide arguments for path to majorities file and output file name")
+} else {
+  main(args[1], args[2])
+}
