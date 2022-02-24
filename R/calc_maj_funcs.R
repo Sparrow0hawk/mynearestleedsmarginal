@@ -14,7 +14,7 @@ data_tidy <- function(dataframe) {
 
     for(item in str_remove){
         dataframe$Description <- str_remove(dataframe$Description,
-                                         " Candidate")
+                                         item)
     }
 
     dataframe$Ward <- str_replace(dataframe$Ward,'&','and')
