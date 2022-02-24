@@ -42,7 +42,7 @@ ui <- fluidPage(
 
     sidebarPanel(
 
-      tags$p("Welcome to my nearest marginal ward for Leeds 2021 council elections!"),
+      tags$p("Welcome to the mynearestmarginal app for Leeds 2022 council elections!"),
       tags$p("We need your help to keep Leeds a Labour Council this year."),
       tags$p("Enter your postcode below and press search to
             find your nearest marginal."),
@@ -63,7 +63,7 @@ ui <- fluidPage(
       tags$br(),
       tags$br(),
 
-      tags$strong("Don't forget polling day is Thursday 6th May!")
+      tags$strong("Don't forget polling day is Thursday 5th May!")
       ,tags$p(" ")
       ,tags$p('#keepLeedsLabour', class = 'Linkbutton')
       ,tags$p(' ')
@@ -92,7 +92,7 @@ ui <- fluidPage(
               )
       ,tags$br(),
       tags$p(id = "help1", "Made by Alex Coleman ~ Found an error?",
-             tags$a(id = "help1",href="mailto:campaigns@leedscentralclp.com", "Email Me.")),
+             tags$a(id = "help1",href="https://github.com/Sparrow0hawk/mynearestleedsmarginal/issues/new", "Raise an Issue on GitHub")),
       tags$p(id = "help1", "If the page becomes unresponsive try refreshing your browser."),
       tags$p(id = "help1", "This page was made using Shiny.")
 
