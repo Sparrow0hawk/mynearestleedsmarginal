@@ -13,7 +13,7 @@ Rscript scrapbook/rename_cols.R $DATA_PATH/data2021.csv $DATA_PATH/data-new2021.
 Rscript scrapbook/calculating_majorities.R $DATA_PATH/data-new2021.csv $DATA_PATH/maj2022.csv
 
 # create geojson file
-Rscript scrapbook/singleDF.R $DATA_PATH/maj2022.csv leeds_2022.geojson
+Rscript scrapbook/singleDF.R $DATA_PATH/maj2022.csv main_file FALSE
 
 # tidy up temporary files
-rm $DATA_PATH/data2021.csv $DATA_PATH/data-new2021.csv
+rm $DATA_PATH/data2021.csv $DATA_PATH/data-new2021.csv $DATA_PATH/maj2022.csv

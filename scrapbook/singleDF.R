@@ -8,7 +8,7 @@ library(rgdal)
 library(leaflet)
 source("R/utils.R")
 
-main <- function(majority_file, output_name) {
+main <- function(majority_file, output_name, geojson=FALSE) {
 
       incumbents_df1 <- read.csv(majority_file, row.names = 1)
 
@@ -18,10 +18,15 @@ main <- function(majority_file, output_name) {
                         by.x = 'WARD_NAME', 
                         by.y = 'Ward')
 
-      writeOGR(full_spatial_df, 
-            paste0("assets/data/",output_name), 
-            layer="meuse", 
-            driver="GeoJSON")
+      if(isTRUE(geojson)){
+            writeOGR(full_spatial_df, 
+                  paste0("assets/data/",output_name,".geojson"), 
+                  layer="meuse", 
+                  driver="GeoJSON")
+      }
+      saveRDS(full_spatial_df,
+              paste0("assets/data/",output_name,".Rdata")
+              )
 }
 
 args <- commandArgs(trailingOnly = TRUE)
@@ -29,5 +34,5 @@ args <- commandArgs(trailingOnly = TRUE)
 if(length(args) < 2){
   stop("Must provide arguments for path to majorities file and output file name")
 } else {
-  main(args[1], args[2])
+  main(args[1], args[2], args[3])
 }
