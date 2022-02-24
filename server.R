@@ -13,7 +13,7 @@ options(shiny.sanitize.errors = TRUE)
 # load all prepared data
 
 # load rdata saved in convert2RDS.R
-shape_leeds <- readRDS(here("assets","data","2021geojson.Rdata"))
+shape_leeds <- readRDS(here("assets","data","main_file.Rdata"))
 
 lst <- read.csv(here("assets","data","sampleloc.csv"), row.names = "X")
 
@@ -45,10 +45,10 @@ if( file.exists(here("assets","data","keyseatlist.csv"))) {
 }
 
 # load emails list
-if( file.exists(here("assets","data","emails2020.csv"))) {
+if( file.exists(here("assets","data","keyseats-emails.csv"))) {
 
   emailstbl <- read.csv(
-    here("assets","data","emails2020.csv"),
+    here("assets","data","keyseats-emails.csv"),
     encoding = "latin", header=FALSE)
 
 } else {
@@ -59,7 +59,9 @@ if( file.exists(here("assets","data","emails2020.csv"))) {
 }
 
 # load colours
-polpartycol <- c('blue','black','green','red','orange','purple')
+# expects levels order as
+# "G&S Independents Party","Green Party", "Labour Party","Liberal Democrats","MBIs", "The Conservative Party" 
+polpartycol <- c('black','green','red','orange','purple','blue')
 
 # set emails column names
 names(emailstbl) <- c("Ward","Email")
@@ -74,7 +76,7 @@ shape_leeds <-  merge(shape_leeds, emailstbl,
 server <- function(input, output, session) {
 
   pal <- colorFactor(palette = polpartycol,
-                     levels(as.factor(shape_leeds$Description_2018)))
+                     levels(as.factor(shape_leeds$Description)))
 
   labels <- generate_ward_labels(shape_leeds)
 
@@ -95,7 +97,7 @@ server <- function(input, output, session) {
       addPolygons(data = shape_leeds,
                   stroke = TRUE,
                   color = "black",
-                  fillColor = ~pal(shape_leeds$Description_2018),
+                  fillColor = ~pal(shape_leeds$Description),
                   fillOpacity=0.3,
                   dashArray = 5,
                   weight = 2,
@@ -153,7 +155,7 @@ server <- function(input, output, session) {
         addPolygons(data = target_ward,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(target_ward$Description_2018),
+                    fillColor = ~pal(target_ward$Description),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%
@@ -196,7 +198,7 @@ server <- function(input, output, session) {
         addPolygons(data = shape_leeds,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(shape_leeds$Description_2018),
+                    fillColor = ~pal(shape_leeds$Description),
                     fillOpacity=0.3,
                     dashArray = 5,
                     weight = 2,
@@ -247,7 +249,7 @@ server <- function(input, output, session) {
         addPolygons(data = home.ward,
                     stroke = TRUE,
                     color = "black",
-                    fillColor = ~pal(home.ward$Description_2018),
+                    fillColor = ~pal(home.ward$Description),
                     fillOpacity=0.7,
                     weight = 2,
                     label = labels1) %>%

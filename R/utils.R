@@ -77,15 +77,11 @@ generate_ward_labels <- function(dataframe) {
   
   ward_labels <- sprintf(
     "<strong>%s</strong><br/>
-    2018 Winner - %s <br/>
-    2018 majority - %g<br/>
-    2019 Winner - %s <br/>
-    2019 majority - %g",
+    2021 Winner - %s <br/>
+    2021 majority - %g",
     dataframe$WARD_NAME,
-    dataframe$Description_2018,
-    dataframe$majority_2018,
-    dataframe$Description_2019,
-    dataframe$majority_2019
+    dataframe$Description,
+    dataframe$majority
   ) %>% lapply(htmltools::HTML)
   
   return(ward_labels)
