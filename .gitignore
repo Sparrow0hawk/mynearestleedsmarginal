@@ -7,9 +7,10 @@
 
 # data files
 *.tar.gz
-emails2020.csv
+keyseats-emails.csv
 googleways_key.txt
 keyseatlist.csv
+main_file.Rdata
 
 # mac files
 .DS_Store
