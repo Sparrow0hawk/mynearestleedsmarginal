@@ -35,11 +35,19 @@ calc_majority <- function(dataframe,position_to_start=1, position_to_compare) {
   position_to_start <- as.integer(position_to_start)
   
   # add a rank column by votes and ward
-  by_votes <- dataframe %>% arrange(Ward, Votes) %>%
-    group_by(Ward) %>% 
+  by_votes <- dataframe %>% 
+    # create party rank column for multi member election wards
+    arrange(Ward, Votes) %>%
+    group_by(Ward, Description) %>% 
     # rank by negative votes column
     # rank orders ascending
-    mutate(rank = rank(-Votes, ties.method = "first"))
+    mutate(party_rank = rank(-Votes, ties.method = "first")) %>%
+    # determine majority between top votes of party X and top votes of party Y 
+    # where party X came first (with multiple candidates) and party Y (came second with multiple candidates)
+    filter(party_rank == 1) %>%
+    arrange(Ward, Votes) %>% 
+    group_by(Ward) %>% 
+    mutate(rank = rank(-Votes, ties.method = "first"))    
   
   # create a sliced dataframe taking 
   comparison_frame <- by_votes[by_votes$rank == position_to_start | 
