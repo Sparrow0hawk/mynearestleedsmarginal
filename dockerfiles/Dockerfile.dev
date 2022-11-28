@@ -3,6 +3,8 @@ FROM ghcr.io/sparrow0hawk/mynearestleedsmarginalbase:docker-base
 
 USER root
 
-RUN apt install -y git bash bash-completion
+RUN apt update -y && apt install -y git bash bash-completion
+
+ENV SHELL /bin/bash
 
 USER ruser
