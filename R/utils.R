@@ -73,14 +73,21 @@ return_dialoguelink_html <- function(filtered_dataframe) {
   return(paste(lnk))
 }
 
-generate_ward_labels <- function(dataframe) {
+#' generate a HTML formatted list of labels for wards
+#' 
+#' @param dataframe The dataframe object containing ward by ward data
+#' @param year A character specifying the year of the results contained in `dataframe`
+#' @return ward_labels, a list of HTML formatted labels for each ward
+generate_ward_labels <- function(dataframe, year) {
   
   ward_labels <- sprintf(
     "<strong>%s</strong><br/>
-    2021 Winner - %s <br/>
-    2021 majority - %g",
+    %s Winner - %s <br/>
+    %s majority - %g",
     dataframe$WARD_NAME,
+    year,
     dataframe$Description,
+    year,
     dataframe$majority
   ) %>% lapply(htmltools::HTML)
   
