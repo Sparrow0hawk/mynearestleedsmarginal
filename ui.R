@@ -83,7 +83,10 @@ ui <- fluidPage(
                   #textOutput("value2")),
       leafletOutput("mymap", height = "65vh"),
       tags$p(' ')
-      ,tags$p(align = 'center',
+      ,tags$div(class = 'button-list',
+              tags$a(class = 'Linkbutton2',
+                            href="https://www.gov.uk/apply-for-photo-id-voter-authority-certificate",
+                            'Request your free Voter ID certificate'),
               tags$a(class = 'Linkbutton2',
                      href='https://www.gov.uk/register-to-vote',
                      'Register to vote'),

@@ -57,6 +57,15 @@ h2 {
   font-size: 2rem;
   text-align: center;
 }
+
+.button-list {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  align-items: stretch;
+  font-size: 2rem;
+}
+
 p {
     font-size: 20px;
 }
@@ -84,7 +93,7 @@ label {
 }
 
 .Linkbutton2 {
-  display: inline-block;
+  display: flex;
   width: 200px;
   background: rgb(230, 0, 71);
   padding: 2px;
@@ -92,6 +101,8 @@ label {
   color: white;
   border: 4px solid transparent;
   transition: background-color 1s;
+  justify-content: center;
+  flex-direction: column;
 }
 
 .Linkbutton2:hover {
