@@ -42,7 +42,7 @@ ui <- fluidPage(
 
     sidebarPanel(
 
-      tags$p("Welcome to the mynearestmarginal app for Leeds 2022 council elections!"),
+      tags$p("Welcome to the mynearestmarginal app for Leeds 2023 council elections!"),
       tags$p("We need your help to keep Leeds a Labour Council this year."),
       tags$p("Enter your postcode below and press search to
             find your nearest marginal."),
@@ -63,7 +63,7 @@ ui <- fluidPage(
       tags$br(),
       tags$br(),
 
-      tags$strong("Don't forget polling day is Thursday 5th May!")
+      tags$strong("Don't forget polling day is Thursday 4th May!")
       ,tags$p(" ")
       ,tags$p('#keepLeedsLabour', class = 'Linkbutton')
       ,tags$p(' ')
