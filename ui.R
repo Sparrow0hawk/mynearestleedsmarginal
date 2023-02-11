@@ -78,7 +78,6 @@ ui <- fluidPage(
 
       ),
                   #textOutput("value2")),
-      tags$br(),
       leafletOutput("mymap", height = "65vh"),
       tags$p(' ')
       ,tags$p(align = 'center',
