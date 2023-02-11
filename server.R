@@ -151,7 +151,7 @@ server <- function(input, output, session) {
       target_ward <- target_ward[rank(target_ward@data$Distance.from.points) == 1,]
 
       # generate labels using the 1st row of the filtered dataframe
-      labels1 <- generate_ward_labels(target_ward)
+      labels1 <- generate_ward_labels(target_ward, YEAR)
     }
 
     output$mymap <- renderLeaflet({
@@ -245,7 +245,7 @@ server <- function(input, output, session) {
       # set home.ward variable to the item where Distance is 0
       home.ward <- home.ward[home.ward@data$Distance.from.points == 0,]
       # generate labels for map
-      labels1 <- generate_ward_labels(home.ward)
+      labels1 <- generate_ward_labels(home.ward, YEAR)
     }
 
     output$mymap <- renderLeaflet({
