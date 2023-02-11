@@ -12,6 +12,8 @@ options(shiny.sanitize.errors = TRUE)
 
 # load all prepared data
 
+YEAR <- "2022"
+
 # load rdata saved in convert2RDS.R
 shape_leeds <- readRDS(here("assets","data","main_file.Rdata"))
 
@@ -81,7 +83,7 @@ server <- function(input, output, session) {
   pal <- colorFactor(palette = polpartycol$colour,
                      polpartycol$party)
 
-  labels <- generate_ward_labels(shape_leeds)
+  labels <- generate_ward_labels(shape_leeds, YEAR)
 
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
