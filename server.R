@@ -61,7 +61,10 @@ if( file.exists(here("assets","data","keyseats-emails.csv"))) {
 # load colours
 # expects levels order as
 # "G&S Independents Party","Green Party", "Labour Party","Liberal Democrats","MBIs", "The Conservative Party" 
-polpartycol <- c('black','green','red','orange','purple','blue')
+polpartycol <- data.frame(colour = c('black','green','red','orange','purple','darkcyan','blue'),
+                          party = c("Garforth and Swillington Independents Party","Green Party","Labour Party",
+                                     "Liberal Democrats","Morley Borough Independents","Social Democratic Party",
+                                     "The Conservative Party"))
 
 # set emails column names
 names(emailstbl) <- c("Ward","Email")
@@ -75,8 +78,8 @@ shape_leeds <-  merge(shape_leeds, emailstbl,
 
 server <- function(input, output, session) {
 
-  pal <- colorFactor(palette = polpartycol,
-                     levels(as.factor(shape_leeds$Description)))
+  pal <- colorFactor(palette = polpartycol$colour,
+                     polpartycol$party)
 
   labels <- generate_ward_labels(shape_leeds)
 
