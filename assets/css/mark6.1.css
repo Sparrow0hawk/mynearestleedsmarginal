@@ -41,6 +41,7 @@ h2 {
   padding-top: 20px;
   padding-bottom: 20px;
   padding-left: 2.5%;
+  margin-bottom: 0;
 }
 
 .banner-title {
@@ -49,6 +50,13 @@ h2 {
   width: 100%;
 }
 
+.banner-news {
+  background-color: black;
+  color: white;
+  padding: 1.5rem;
+  font-size: 2rem;
+  text-align: center;
+}
 p {
     font-size: 20px;
 }

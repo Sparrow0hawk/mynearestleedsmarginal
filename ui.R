@@ -35,6 +35,9 @@ ui <- fluidPage(
   tags$div(class='row',
            tags$div(class='banner-title',
            titlePanel("My Nearest Leeds Marginal")
+           ),
+           tags$div(class = "banner-news",
+           tags$p("The Government has introduced a requirement to provide ID to vote this year. Use the button below to request your free voter ID certificate!")
            )
   ),
   # creates a side bar for postcode, button and slider
