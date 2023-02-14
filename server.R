@@ -12,6 +12,8 @@ options(shiny.sanitize.errors = TRUE)
 
 # load all prepared data
 
+YEAR <- "2022"
+
 # load rdata saved in convert2RDS.R
 shape_leeds <- readRDS(here("assets","data","main_file.Rdata"))
 
@@ -61,7 +63,10 @@ if( file.exists(here("assets","data","keyseats-emails.csv"))) {
 # load colours
 # expects levels order as
 # "G&S Independents Party","Green Party", "Labour Party","Liberal Democrats","MBIs", "The Conservative Party" 
-polpartycol <- c('black','green','red','orange','purple','blue')
+polpartycol <- data.frame(colour = c('black','green','red','orange','purple','darkcyan','blue'),
+                          party = c("Garforth and Swillington Independents Party","Green Party","Labour Party",
+                                     "Liberal Democrats","Morley Borough Independents","Social Democratic Party",
+                                     "The Conservative Party"))
 
 # set emails column names
 names(emailstbl) <- c("Ward","Email")
@@ -75,10 +80,10 @@ shape_leeds <-  merge(shape_leeds, emailstbl,
 
 server <- function(input, output, session) {
 
-  pal <- colorFactor(palette = polpartycol,
-                     levels(as.factor(shape_leeds$Description)))
+  pal <- colorFactor(palette = polpartycol$colour,
+                     polpartycol$party)
 
-  labels <- generate_ward_labels(shape_leeds)
+  labels <- generate_ward_labels(shape_leeds, YEAR)
 
   # pressing button on empty postcode input now creates map for centred leeds address
   # additional functionality would be to wildcard several leeds addresses aimed at under populated
@@ -146,7 +151,7 @@ server <- function(input, output, session) {
       target_ward <- target_ward[rank(target_ward@data$Distance.from.points) == 1,]
 
       # generate labels using the 1st row of the filtered dataframe
-      labels1 <- generate_ward_labels(target_ward)
+      labels1 <- generate_ward_labels(target_ward, YEAR)
     }
 
     output$mymap <- renderLeaflet({
@@ -240,7 +245,7 @@ server <- function(input, output, session) {
       # set home.ward variable to the item where Distance is 0
       home.ward <- home.ward[home.ward@data$Distance.from.points == 0,]
       # generate labels for map
-      labels1 <- generate_ward_labels(home.ward)
+      labels1 <- generate_ward_labels(home.ward, YEAR)
     }
 
     output$mymap <- renderLeaflet({

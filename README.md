@@ -11,16 +11,16 @@ If you have [Docker](https://www.docker.com/) installed this app can be built in
 ```bash
 cd mynearestleedsmarginal2019/
 
-docker build -t mynearestleedsmarg .
+docker build . -f dockerfiles/Dockerfile -t mynearestleedsmarg:latest
 ```
 
 You can run the container with the command:
 
 ```bash
-docker run --rm -p 3838:3838 mynearestleedsmarg
+docker run --rm -p 3838:3838 mynearestleedsmarg:latest
 ```
 
-With the container running you can navigate to `localhost:3838` in a web browser to view/interact with the app.
+With the container running you can navigate to `http://localhost:3838` in a web browser to view/interact with the app.
 
 ### Deploying to Google Cloud Run
 

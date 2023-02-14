@@ -35,6 +35,9 @@ ui <- fluidPage(
   tags$div(class='row',
            tags$div(class='banner-title',
            titlePanel("My Nearest Leeds Marginal")
+           ),
+           tags$div(class = "banner-news",
+           tags$p("The Government has introduced a requirement to provide ID to vote this year. Use the button below to request your free voter ID certificate!")
            )
   ),
   # creates a side bar for postcode, button and slider
@@ -42,7 +45,7 @@ ui <- fluidPage(
 
     sidebarPanel(
 
-      tags$p("Welcome to the mynearestmarginal app for Leeds 2022 council elections!"),
+      tags$p("Welcome to the mynearestmarginal app for Leeds 2023 council elections!"),
       tags$p("We need your help to keep Leeds a Labour Council this year."),
       tags$p("Enter your postcode below and press search to
             find your nearest marginal."),
@@ -63,7 +66,7 @@ ui <- fluidPage(
       tags$br(),
       tags$br(),
 
-      tags$strong("Don't forget polling day is Thursday 5th May!")
+      tags$strong("Don't forget polling day is Thursday 4th May!")
       ,tags$p(" ")
       ,tags$p('#keepLeedsLabour', class = 'Linkbutton')
       ,tags$p(' ')
@@ -78,10 +81,12 @@ ui <- fluidPage(
 
       ),
                   #textOutput("value2")),
-      tags$br(),
       leafletOutput("mymap", height = "65vh"),
       tags$p(' ')
-      ,tags$p(align = 'center',
+      ,tags$div(class = 'button-list',
+              tags$a(class = 'Linkbutton2',
+                            href="https://www.gov.uk/apply-for-photo-id-voter-authority-certificate",
+                            'Request your free Voter ID certificate'),
               tags$a(class = 'Linkbutton2',
                      href='https://www.gov.uk/register-to-vote',
                      'Register to vote'),
