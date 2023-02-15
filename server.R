@@ -112,6 +112,8 @@ server <- function(input, output, session) {
 
   observeEvent(input$go, {
 
+    message("INFO: Marginal click")
+
     if (!is.null(points)) {
 
       points_a <- cbind(lon = points()$results$geometry$location$lng, lat = points()$results$geometry$location$lat)
@@ -149,6 +151,8 @@ server <- function(input, output, session) {
       # arranges by distance (nearest first) key seats list
       # take the top item
       target_ward <- target_ward[rank(target_ward@data$Distance.from.points) == 1,]
+
+      message(paste0("INFO: Marginal result - ", target_ward$WARD_NAME))
 
       # generate labels using the 1st row of the filtered dataframe
       labels1 <- generate_ward_labels(target_ward, YEAR)
@@ -196,6 +200,8 @@ server <- function(input, output, session) {
   # added for map refresh button
   observeEvent(input$refresher_map, {
 
+    message("INFO: Refresh click")
+
     output$mymap <- renderLeaflet({
       leafletOptions(maxZoom = 10)
       leaflet() %>%
@@ -230,6 +236,8 @@ server <- function(input, output, session) {
 
   observeEvent(input$my_ward, {
 
+    message("INFO: Home click")
+
     if (!is.null(points2)) {
 
       points_a2 <- cbind(lon = points2()$results$geometry$location$lng, lat = points2()$results$geometry$location$lat)
@@ -244,6 +252,8 @@ server <- function(input, output, session) {
       names(home.ward)[length(names(home.ward))] <- c("Distance.from.points")
       # set home.ward variable to the item where Distance is 0
       home.ward <- home.ward[home.ward@data$Distance.from.points == 0,]
+
+      message(paste0("INFO: Home result - ", home.ward$WARD_NAME))
       # generate labels for map
       labels1 <- generate_ward_labels(home.ward, YEAR)
     }
