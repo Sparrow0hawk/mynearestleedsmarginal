@@ -13,7 +13,6 @@ card_meta <- list(
 # anything going into fluidPage goes into app
 ui <- fluidPage(
   tags$head(
-    includeScript(here("assets","js","gtag1.js")),
     # section for twitter card
     tags$meta(name = 'twitter:card', content = 'summary'),
     tags$meta(name = 'twitter:title', content = card_meta$t_ilte),
