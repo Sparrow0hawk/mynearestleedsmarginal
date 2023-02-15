@@ -73,13 +73,11 @@ ui <- fluidPage(
 
     ),
     mainPanel(
-      #tags$body(includeScript("./assets/js/bookmark1.js")),
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
 
       ),
-                  #textOutput("value2")),
       leafletOutput("mymap", height = "65vh"),
       tags$p(' ')
       ,tags$div(class = 'button-list',
