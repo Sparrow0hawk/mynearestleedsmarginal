@@ -1,0 +1,12 @@
+
+.git
+.gitignore
+.gcloudignore
+scrapbook
+*.tar.gz
+
+scrapbook
+renv
+environment.yml
+.github
+.devcontainer
