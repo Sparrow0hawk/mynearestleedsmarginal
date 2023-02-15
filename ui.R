@@ -13,7 +13,6 @@ card_meta <- list(
 # anything going into fluidPage goes into app
 ui <- fluidPage(
   tags$head(
-    includeScript(here("assets","js","gtag1.js")),
     # section for twitter card
     tags$meta(name = 'twitter:card', content = 'summary'),
     tags$meta(name = 'twitter:title', content = card_meta$t_ilte),
@@ -74,13 +73,11 @@ ui <- fluidPage(
 
     ),
     mainPanel(
-      #tags$body(includeScript("./assets/js/bookmark1.js")),
       tags$div(tags$p(htmlOutput("value"),
                 htmlOutput("link1"),
                 htmlOutput("link2"))
 
       ),
-                  #textOutput("value2")),
       leafletOutput("mymap", height = "65vh"),
       tags$p(' ')
       ,tags$div(class = 'button-list',
