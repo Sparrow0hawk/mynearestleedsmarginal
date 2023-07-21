@@ -22,6 +22,17 @@ resource "google_artifact_registry_repository" "docker-repo" {
   format        = "DOCKER"
 }
 
+resource "google_service_account" "cloud-run-service-act" {
+  project      = var.project
+  account_id   = "leeds-app-sa"
+  display_name = "Cloud run service account"
+}
+
+resource "google_service_account_key" "mykey" {
+  service_account_id = google_service_account.cloud-run-service-act.name
+  public_key_type    = "TYPE_X509_PEM_FILE"
+}
+
 
 resource "google_cloud_run_service" "default" {
   name     = "mynearestleedsmarginal-deploy"
@@ -35,6 +46,7 @@ resource "google_cloud_run_service" "default" {
     containers {
         image = "us-docker.pkg.dev/cloudrun/container/hello"
       }
+      service_account_name = google_service_account.cloud-run-service-act.email
     }
   }
 }
