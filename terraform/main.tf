@@ -23,16 +23,17 @@ resource "google_artifact_registry_repository" "docker-repo" {
 }
 
 
-resource "google_cloud_run_v2_service" "default" {
+resource "google_cloud_run_service" "default" {
   name     = "mynearestleedsmarginal-deploy"
   location = var.region
-  ingress  = "INGRESS_TRAFFIC_ALL"
 
+  metadata {
+    namespace = var.project
+  }
   template {
+    spec {
     containers {
-      image = join("/", ["${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.docker-repo.repository_id}", "mynearestleedsmarg"])
-      ports {
-        container_port = 3838
+        image = "us-docker.pkg.dev/cloudrun/container/hello"
       }
     }
   }
@@ -47,9 +48,9 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_v2_service.default.location
-  project  = google_cloud_run_v2_service.default.project
-  service  = google_cloud_run_v2_service.default.name
+  location = google_cloud_run_service.default.location
+  project  = google_cloud_run_service.default.project
+  service  = google_cloud_run_service.default.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
