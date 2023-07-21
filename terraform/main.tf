@@ -51,6 +51,20 @@ resource "google_cloud_run_service" "default" {
   }
 }
 
+# need to resolve errors around verification
+# resource "google_cloud_run_domain_mapping" "default" {
+#   location = var.region
+#   name     = "mynearestleedsmarginal.com"
+
+#   metadata {
+#     namespace = var.project
+#   }
+
+#   spec {
+#     route_name = google_cloud_run_service.default.name
+#   }
+# }
+
 # add a iam policy to make app public
 data "google_iam_policy" "noauth" {
   binding {
