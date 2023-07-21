@@ -1,11 +1,11 @@
 variable "project" {
-  default = "test-cloud-run-iap"
+  default = "mynearestleedsmarginal-prod"
 }
 
 variable "region" {
-  default = "europe-west2"
+  default = "europe-west1"
 }
 
 variable "zone" {
-  default = "europe-west2-a"
+  default = "europe-west1-a"
 }
