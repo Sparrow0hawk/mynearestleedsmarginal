@@ -1,0 +1,39 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Create and push Docker image to Google Cloud Run
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+    docker:
+        permissions:
+          contents: 'read'
+          id-token: 'write'
+        runs-on: ubuntu-latest
+        steps:
+          - uses: actions/checkout@v3
+          - id: auth
+            name: Authenticate with Google Cloud
+            uses: google-github-actions/auth@v0
+            with:
+                credentials_json: '${{ secrets.GOOGLE_CREDENTIALS }}'
+  
+          - name: Login to Artifact Registry
+            uses: docker/login-action@v1
+            with:
+              registry: europe-west1-docker.pkg.dev
+              username: oauth2accesstoken
+              password: ${{ steps.auth.outputs.access_token }}
+  
+          - name: Build and push
+            uses: docker/build-push-action@v4
+            with:
+              context: .
+              tags: europe-west1-docker.pkg.dev/mynearestleedsmarginal-prod/docker/mynearestleedsmarg:${{github.sha}}
+              push: true
+              file: dockerfiles/Dockerfile
