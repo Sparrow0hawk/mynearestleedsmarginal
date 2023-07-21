@@ -14,3 +14,7 @@ output "service-account-key" {
 output "service-account-email" {
   value = google_service_account.cloud-run-service-act.email
 }
+
+output "storage-bucket" {
+  value = google_storage_bucket.main.url
+}

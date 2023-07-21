@@ -80,3 +80,15 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
+
+resource "google_storage_bucket" "main" {
+  name     = "mynearestleeds-app-assets"
+  location = var.region
+  project  = var.project
+
+  public_access_prevention = "enforced"
+
+  versioning {
+    enabled = true
+  }
+}
