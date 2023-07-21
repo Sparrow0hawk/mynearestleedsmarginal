@@ -4,7 +4,7 @@
 
 terraform {
   backend "gcs" {
-    bucket = "mynearest-tf-backend"
+    bucket = "mynearestleeds-tf-backend"
     prefix = "main"
   }
 }
