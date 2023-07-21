@@ -28,6 +28,19 @@ resource "google_service_account" "cloud-run-service-act" {
   display_name = "Cloud run service account"
 }
 
+locals {
+  sa_roles = ["roles/iam.serviceAccountTokenCreator",
+    "roles/artifactregistry.writer"
+  ]
+}
+
+resource "google_project_iam_member" "project" {
+  for_each = toset(local.sa_roles)
+  project  = var.project
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.cloud-run-service-act.email}"
+}
+
 resource "google_service_account_key" "mykey" {
   service_account_id = google_service_account.cloud-run-service-act.name
   public_key_type    = "TYPE_X509_PEM_FILE"
