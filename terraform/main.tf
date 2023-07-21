@@ -17,7 +17,7 @@ provider "google" {
 
 resource "google_artifact_registry_repository" "docker-repo" {
   location      = var.region
-  repository_id = join("", [var.project, "-ecr"])
+  repository_id = "docker"
   description   = "Docker container registry"
   format        = "DOCKER"
 }
