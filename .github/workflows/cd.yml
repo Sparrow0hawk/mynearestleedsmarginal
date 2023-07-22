@@ -30,7 +30,7 @@ jobs:
 
           - name: copy files from bucket
             run:
-              gsutil cp ${{ secrets.BUCKET_URL }}/* assets/data/
+              gsutil -q cp ${{ secrets.BUCKET_URL }}/* assets/data/
   
           - name: Login to Artifact Registry
             uses: docker/login-action@v1
