@@ -30,7 +30,8 @@ resource "google_service_account" "cloud-run-service-act" {
 
 locals {
   sa_roles = ["roles/iam.serviceAccountTokenCreator",
-    "roles/artifactregistry.writer"
+    "roles/artifactregistry.writer",
+    "roles/run.developer"
   ]
 }
 
