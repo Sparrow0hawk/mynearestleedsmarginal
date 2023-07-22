@@ -45,3 +45,9 @@ jobs:
               tags: europe-west1-docker.pkg.dev/mynearestleedsmarginal-prod/docker/mynearestleedsmarg:${{github.sha}}
               push: true
               file: dockerfiles/Dockerfile
+
+          - name: Deploy to Google Cloud Run
+            uses: 'google-github-actions/deploy-cloudrun@v1'
+            with:
+              service: 'mynearestleedsmarginal-deploy'
+              image: europe-west1-docker.pkg.dev/mynearestleedsmarginal-prod/docker/mynearestleedsmarg:${{github.sha}}
