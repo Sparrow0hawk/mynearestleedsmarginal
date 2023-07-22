@@ -35,6 +35,11 @@ locals {
     "roles/iam.serviceAccountUser"
   ]
 
+  domains = [
+    "www.mynearestleedsmarginal.com",
+    "mynearestleedsmarginal.com"
+  ]
+
   container_registry_url = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.docker-repo.repository_id}"
 }
 
@@ -68,19 +73,20 @@ resource "google_cloud_run_service" "default" {
   }
 }
 
-# need to resolve errors around verification
-# resource "google_cloud_run_domain_mapping" "default" {
-#   location = var.region
-#   name     = "mynearestleedsmarginal.com"
 
-#   metadata {
-#     namespace = var.project
-#   }
+resource "google_cloud_run_domain_mapping" "default" {
+  for_each = toset(local.domains)
+  location = var.region
+  name     = each.value
 
-#   spec {
-#     route_name = google_cloud_run_service.default.name
-#   }
-# }
+  metadata {
+    namespace = var.project
+  }
+
+  spec {
+    route_name = google_cloud_run_service.default.name
+  }
+}
 
 # add a iam policy to make app public
 data "google_iam_policy" "noauth" {
