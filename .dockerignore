@@ -10,3 +10,5 @@ renv
 environment.yml
 .github
 .devcontainer
+
+terraform
