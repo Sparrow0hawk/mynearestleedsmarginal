@@ -34,6 +34,8 @@ locals {
     "roles/run.developer",
     "roles/iam.serviceAccountUser"
   ]
+
+  container_registry_url = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.docker-repo.repository_id}"
 }
 
 resource "google_project_iam_member" "project" {
@@ -59,7 +61,7 @@ resource "google_cloud_run_service" "default" {
   template {
     spec {
       containers {
-        image = "us-docker.pkg.dev/cloudrun/container/hello"
+        image = join("/", [local.container_registry_url, "mynearestleedsmarg:latest"])
       }
       service_account_name = google_service_account.cloud-run-service-act.email
     }
