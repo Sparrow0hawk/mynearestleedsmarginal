@@ -105,3 +105,9 @@ resource "google_storage_bucket" "main" {
     enabled = true
   }
 }
+
+resource "google_storage_bucket_iam_member" "member" {
+  bucket = google_storage_bucket.main.name
+  role   = "roles/storage.objectViewer"
+  member = "serviceAccount:${google_service_account.cloud-run-service-act.email}"
+}
