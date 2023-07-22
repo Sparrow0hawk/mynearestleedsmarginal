@@ -53,4 +53,4 @@ jobs:
               service: 'mynearestleedsmarginal-deploy'
               image: europe-west1-docker.pkg.dev/mynearestleedsmarginal-prod/docker/mynearestleedsmarg:${{github.sha}}
               region: europe-west1
-              flags: "--platform=managed --port=5000"
+              flags: "--platform=managed --port=3838"
