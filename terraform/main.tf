@@ -67,6 +67,9 @@ resource "google_cloud_run_service" "default" {
     spec {
       containers {
         image = join("/", [local.container_registry_url, "mynearestleedsmarg:latest"])
+        ports {
+          container_port = 3838
+        }
       }
       service_account_name = google_service_account.cloud-run-service-act.email
     }
