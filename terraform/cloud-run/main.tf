@@ -1,7 +1,3 @@
-# need cloud run
-# artifact registry
-# OIDC
-
 terraform {
   backend "gcs" {
     bucket = "mynearestleeds-tf-backend"
@@ -13,13 +9,6 @@ provider "google" {
   project = var.project
   region  = var.region
   zone    = var.zone
-}
-
-resource "google_artifact_registry_repository" "docker-repo" {
-  location      = var.region
-  repository_id = "docker"
-  description   = "Docker container registry"
-  format        = "DOCKER"
 }
 
 resource "google_service_account" "cloud-run-service-act" {
@@ -40,7 +29,7 @@ locals {
     "mynearestleedsmarginal.com"
   ]
 
-  container_registry_url = "${var.region}-docker.pkg.dev/${var.project}/${google_artifact_registry_repository.docker-repo.repository_id}"
+  container_registry_url = "${var.region}-docker.pkg.dev/${var.project}/docker"
 }
 
 resource "google_project_iam_member" "project" {
@@ -56,7 +45,7 @@ resource "google_service_account_key" "mykey" {
 }
 
 
-resource "google_cloud_run_service" "default" {
+resource "google_cloud_run_service" "main-app" {
   name     = "mynearestleedsmarginal-deploy"
   location = var.region
 
@@ -107,20 +96,12 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   policy_data = data.google_iam_policy.noauth.policy_data
 }
 
-resource "google_storage_bucket" "main" {
-  name     = "mynearestleeds-app-assets"
-  location = var.region
-  project  = var.project
-
-  public_access_prevention = "enforced"
-
-  versioning {
-    enabled = true
-  }
+data "google_storage_bucket" "app-assets" {
+  name = "mynearestleeds-app-assets"
 }
 
 resource "google_storage_bucket_iam_member" "member" {
-  bucket = google_storage_bucket.main.name
+  bucket = data.google_storage_bucket.app-assets.name
   role   = "roles/storage.objectViewer"
   member = "serviceAccount:${google_service_account.cloud-run-service-act.email}"
 }

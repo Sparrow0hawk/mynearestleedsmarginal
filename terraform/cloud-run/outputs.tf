@@ -1,9 +1,5 @@
 output "app-url" {
-  value = google_cloud_run_service.default.status[0].url
-}
-
-output "project" {
-  value = var.project
+  value = google_cloud_run_service.main-app.status[0].url
 }
 
 output "service-account-key" {
@@ -13,8 +9,4 @@ output "service-account-key" {
 
 output "service-account-email" {
   value = google_service_account.cloud-run-service-act.email
-}
-
-output "storage-bucket" {
-  value = google_storage_bucket.main.url
 }
