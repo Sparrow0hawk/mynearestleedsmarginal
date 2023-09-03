@@ -7,7 +7,7 @@ name: Create and push Docker image to Google Cloud Run
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ 'main' ]
 
 jobs:
     docker:
