@@ -18,3 +18,8 @@ To create the docker repo:
     ```
     terraform apply
     ```
+
+## Notes on Domain Mapping
+
+- Domain mapping may succeed in the terraform apply step but still take some
+  time to fully come into effect
