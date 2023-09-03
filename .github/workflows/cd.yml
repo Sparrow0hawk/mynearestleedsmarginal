@@ -8,6 +8,7 @@ name: Create and push Docker image to Google Cloud Run
 on:
   push:
     branches: [ 'main' ]
+    paths-ignore: ['terraform/**']
 
 jobs:
     docker:
