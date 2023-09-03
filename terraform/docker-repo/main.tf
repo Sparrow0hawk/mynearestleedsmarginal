@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket = "mynearestleeds-tf-backend"
-    prefix = "main"
+    prefix = "docker-repo"
   }
 }
 
