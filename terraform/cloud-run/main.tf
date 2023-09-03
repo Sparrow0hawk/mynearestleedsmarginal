@@ -76,7 +76,7 @@ resource "google_cloud_run_domain_mapping" "default" {
   }
 
   spec {
-    route_name = google_cloud_run_service.default.name
+    route_name = google_cloud_run_service.main-app.name
   }
 }
 
@@ -89,9 +89,9 @@ data "google_iam_policy" "noauth" {
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
-  location = google_cloud_run_service.default.location
-  project  = google_cloud_run_service.default.project
-  service  = google_cloud_run_service.default.name
+  location = google_cloud_run_service.main-app.location
+  project  = google_cloud_run_service.main-app.project
+  service  = google_cloud_run_service.main-app.name
 
   policy_data = data.google_iam_policy.noauth.policy_data
 }
